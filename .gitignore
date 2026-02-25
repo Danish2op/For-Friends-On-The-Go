@@ -2,6 +2,7 @@
 
 # dependencies
 node_modules/
+functions/lib/
 
 # Expo
 .expo/
@@ -31,7 +32,12 @@ yarn-error.*
 *.pem
 
 # local env files
+.env
 .env*.local
+
+# Firebase native config
+google-services.json
+GoogleService-Info.plist
 
 # typescript
 *.tsbuildinfo

@@ -1,25 +1,36 @@
 {
   "expo": {
     "name": "ForFriendsOnTheGo",
-    "slug": "ForFriendsOnTheGo",
+    "slug": "ForFriendsOnTheGo-App",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/Gemini_Generated_Image_4kxl224kxl224kxl.png",
     "scheme": "forfriendsonthego",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.danishsharma.ForFriendsOnTheGo"
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundImage": "./assets/images/android-icon-background.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+        "backgroundColor": "#000000",
+        "foregroundImage": "./assets/images/Gemini_Generated_Image_4kxl224kxl224kxl.png"
       },
+      "package": "com.danishsharma.ForFriendsOnTheGo",
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "googleServicesFile": "./google-services.json",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyB5EAQnZrMssq6QtWCykF4gZiawJThq2Ek"
+        }
+      },
+      "permissions": [
+        "android.permission.INTERNET",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION"
+      ]
     },
     "web": {
       "output": "static",
@@ -27,6 +38,13 @@
     },
     "plugins": [
       "expo-router",
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow ForFriendsOnTheGo to use your location."
+        }
+      ],
+      "expo-notifications",
       [
         "expo-splash-screen",
         {
@@ -43,6 +61,18 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "450150cf-ce6f-4b59-8aff-90ce8ed80884"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/450150cf-ce6f-4b59-8aff-90ce8ed80884"
     }
   }
 }

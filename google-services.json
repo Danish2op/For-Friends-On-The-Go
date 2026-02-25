@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "462841730791",
+    "project_id": "forfriendsonthego",
+    "storage_bucket": "forfriendsonthego.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:462841730791:android:5541c9faa867736fcd3442",
+        "android_client_info": {
+          "package_name": "com.danishsharma.ForFriendsOnTheGo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "462841730791-is44tjgkilduebpnkv6s203klnmsjlec.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.danishsharma.ForFriendsOnTheGo",
+            "certificate_hash": "7326e3eb3869b01097d6d0d4eb1f8a132167f7d7"
+          }
+        },
+        {
+          "client_id": "462841730791-dru9qvqmkh7ag9aaljv798cjbp4gs068.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3nJ5GdgZ-FSH1EUYtceILKfX4qauEv_k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "462841730791-dru9qvqmkh7ag9aaljv798cjbp4gs068.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "462841730791-a4ilh23pmjl7lpbppkef76ktjlldup7b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.danishsharma.ForFriendsOnTheGo"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -10,10 +10,20 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    npm install
    ```
 
-2. Start the app
+2. Configure environment variables (required)
 
    ```bash
-   npx expo start
+   cp .env.example .env.local
+   ```
+
+   Fill all required keys in `.env.local`:
+   - `EXPO_PUBLIC_OLA_MAPS_API_KEY`
+   - `EXPO_PUBLIC_GOOGLE_MAPS_API_KEY`
+
+3. Start the app
+
+   ```bash
+   npx expo start -c
    ```
 
 In the output, you'll find options to open the app in a
@@ -24,6 +34,23 @@ In the output, you'll find options to open the app in a
 - [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
 
 You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+
+## Production build checklist
+
+1. Ensure build-time env vars are set for EAS:
+   - `EXPO_PUBLIC_OLA_MAPS_API_KEY`
+   - `EXPO_PUBLIC_GOOGLE_MAPS_API_KEY`
+2. Deploy Firebase Firestore rules:
+
+   ```bash
+   firebase deploy --only firestore:rules
+   ```
+
+3. Build APK:
+
+   ```bash
+   eas build --platform android --profile production
+   ```
 
 ## Get a fresh project
 

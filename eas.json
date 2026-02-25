@@ -1,0 +1,33 @@
+{
+    "build": {
+        "preview": {
+            "channel": "preview",
+            "android": {
+                "buildType": "apk"
+            },
+            "env": {
+                "EXPO_PUBLIC_OLA_MAPS_API_KEY": "replace_with_ola_maps_key",
+                "EXPO_PUBLIC_GOOGLE_MAPS_API_KEY": "replace_with_google_maps_key",
+                "EXPO_PUBLIC_FIREBASE_API_KEY": "replace_with_firebase_web_api_key",
+                "EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN": "replace_with_firebase_auth_domain",
+                "EXPO_PUBLIC_FIREBASE_PROJECT_ID": "replace_with_firebase_project_id",
+                "EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET": "replace_with_firebase_storage_bucket",
+                "EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID": "replace_with_firebase_messaging_sender_id",
+                "EXPO_PUBLIC_FIREBASE_APP_ID": "replace_with_firebase_web_app_id"
+            }
+        },
+        "production": {
+            "channel": "production",
+            "env": {
+                "EXPO_PUBLIC_OLA_MAPS_API_KEY": "replace_with_ola_maps_key",
+                "EXPO_PUBLIC_GOOGLE_MAPS_API_KEY": "replace_with_google_maps_key",
+                "EXPO_PUBLIC_FIREBASE_API_KEY": "replace_with_firebase_web_api_key",
+                "EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN": "replace_with_firebase_auth_domain",
+                "EXPO_PUBLIC_FIREBASE_PROJECT_ID": "replace_with_firebase_project_id",
+                "EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET": "replace_with_firebase_storage_bucket",
+                "EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID": "replace_with_firebase_messaging_sender_id",
+                "EXPO_PUBLIC_FIREBASE_APP_ID": "replace_with_firebase_web_app_id"
+            }
+        }
+    }
+}

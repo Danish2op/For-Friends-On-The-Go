@@ -1,0 +1,627 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isSelf(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    function usernamePath(username) {
+      return /databases/$(database)/documents/usernameIndex/$(username);
+    }
+
+    function userPath(uid) {
+      return /databases/$(database)/documents/users/$(uid);
+    }
+
+    function sessionPath(sessionId) {
+      return /databases/$(database)/documents/sessions/$(sessionId);
+    }
+
+    function incomingRequestPath(targetUid, requesterUid) {
+      return /databases/$(database)/documents/users/$(targetUid)/friendRequests/$(requesterUid);
+    }
+
+    function outgoingRequestPath(requesterUid, targetUid) {
+      return /databases/$(database)/documents/users/$(requesterUid)/sentFriendRequests/$(targetUid);
+    }
+
+    function isFriendOf(uid) {
+      return isSignedIn()
+        && exists(userPath(uid))
+        && request.auth.uid in get(userPath(uid)).data.friends;
+    }
+
+    function isValidUsername(username) {
+      return username is string
+        && username.size() >= 3
+        && username.size() <= 20
+        && username.matches('^[A-Za-z0-9_]+$');
+    }
+
+    function isValidUsernameKey(usernameKey) {
+      return usernameKey is string
+        && usernameKey.size() >= 3
+        && usernameKey.size() <= 20
+        && usernameKey.matches('^[a-z0-9_]+$');
+    }
+
+    function isValidEmail(email) {
+      return email is string
+        && email.size() >= 5
+        && email.size() <= 254
+        && email.matches('^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$');
+    }
+
+    function isValidAvatar(avatarId) {
+      return avatarId is string && avatarId in ['1', '2', '3', '4', '5'];
+    }
+
+    function isValidExpoPushToken(token) {
+      return token is string
+        && token.size() >= 20
+        && token.size() <= 255
+        && token.matches('^Expo(nent)?PushToken\\[[^\\]]+\\]$');
+    }
+
+    function isValidSessionCode(code) {
+      return code is string
+        && code.size() == 6
+        && code.matches('^[A-Z0-9]{6}$');
+    }
+
+    function hasStrictUserShape(uid, payload) {
+      return payload.keys().hasOnly([
+          'uid',
+          'email',
+          'emailNormalized',
+          'username',
+          'usernameLower',
+          'avatarId',
+          'friends',
+          'lastSeen',
+          'createdAt',
+          'updatedAt',
+          'profileVersion'
+        ])
+        && payload.uid == uid
+        && isValidEmail(payload.email)
+        && isValidEmail(payload.emailNormalized)
+        && isValidUsername(payload.username)
+        && isValidUsernameKey(payload.usernameLower)
+        && isValidAvatar(payload.avatarId)
+        && payload.friends is list
+        && payload.lastSeen is timestamp
+        && payload.createdAt is timestamp
+        && payload.updatedAt is timestamp
+        && payload.profileVersion is number;
+    }
+
+    function hasLegacyUserShape(uid, payload) {
+      return payload.keys().hasOnly(['uid', 'username', 'avatarId', 'friends', 'lastSeen'])
+        && payload.uid == uid
+        && isValidUsername(payload.username)
+        && isValidAvatar(payload.avatarId)
+        && payload.friends is list
+        && payload.lastSeen is timestamp;
+    }
+
+    function hasValidUserShape(uid, payload) {
+      return hasStrictUserShape(uid, payload) || hasLegacyUserShape(uid, payload);
+    }
+
+    function requesterAddedAsFriend() {
+      return !(request.auth.uid in resource.data.friends)
+        && request.auth.uid in request.resource.data.friends
+        && request.resource.data.friends.hasAll(resource.data.friends)
+        && request.resource.data.friends.size() == resource.data.friends.size() + 1;
+    }
+
+    function requesterRemovedAsFriend() {
+      return request.auth.uid in resource.data.friends
+        && !(request.auth.uid in request.resource.data.friends)
+        && resource.data.friends.hasAll(request.resource.data.friends)
+        && resource.data.friends.size() == request.resource.data.friends.size() + 1;
+    }
+
+    function hasFriendRequestShape(payload, requesterUid, targetUid) {
+      return payload.keys().hasOnly([
+          'requesterUid',
+          'requesterUsername',
+          'requesterAvatarId',
+          'targetUid',
+          'targetUsername',
+          'targetAvatarId',
+          'status',
+          'createdAt',
+          'updatedAt',
+          'respondedAt'
+        ])
+        && payload.requesterUid == requesterUid
+        && payload.targetUid == targetUid
+        && isValidUsername(payload.requesterUsername)
+        && isValidAvatar(payload.requesterAvatarId)
+        && isValidUsername(payload.targetUsername)
+        && isValidAvatar(payload.targetAvatarId);
+    }
+
+    function isPendingFriendRequestCreate(payload, requesterUid, targetUid) {
+      return hasFriendRequestShape(payload, requesterUid, targetUid)
+        && payload.status == 'pending'
+        && payload.createdAt is timestamp
+        && payload.updatedAt is timestamp
+        && payload.respondedAt == null;
+    }
+
+    function isFriendRequestTransition(next, prev, nextStatus) {
+      return next.keys().hasOnly([
+          'requesterUid',
+          'requesterUsername',
+          'requesterAvatarId',
+          'targetUid',
+          'targetUsername',
+          'targetAvatarId',
+          'status',
+          'createdAt',
+          'updatedAt',
+          'respondedAt'
+        ])
+        && next.requesterUid == prev.requesterUid
+        && next.requesterUsername == prev.requesterUsername
+        && next.requesterAvatarId == prev.requesterAvatarId
+        && next.targetUid == prev.targetUid
+        && next.targetUsername == prev.targetUsername
+        && next.targetAvatarId == prev.targetAvatarId
+        && next.createdAt == prev.createdAt
+        && prev.status == 'pending'
+        && next.status == nextStatus
+        && next.updatedAt is timestamp
+        && next.respondedAt is timestamp
+        && request.resource.data.diff(resource.data).changedKeys().hasOnly(['status', 'updatedAt', 'respondedAt']);
+    }
+
+    function hasLobbyInviteShape(payload, recipientUid, inviteId) {
+      return payload.keys().hasOnly([
+          'inviteId',
+          'lobbyId',
+          'lobbyCode',
+          'hostUid',
+          'hostUsername',
+          'recipientUid',
+          'status',
+          'createdAt',
+          'updatedAt',
+          'expiresAt',
+          'respondedAt'
+        ])
+        && payload.inviteId == inviteId
+        && payload.lobbyId == inviteId
+        && payload.recipientUid == recipientUid
+        && payload.hostUid is string
+        && payload.hostUid.size() > 0
+        && isValidUsername(payload.hostUsername)
+        && isValidSessionCode(payload.lobbyCode)
+        && payload.createdAt is timestamp
+        && payload.updatedAt is timestamp
+        && payload.expiresAt is timestamp;
+    }
+
+    match /users/{uid} {
+      allow read: if isSignedIn();
+
+      allow create: if isSelf(uid)
+        && hasStrictUserShape(uid, request.resource.data)
+        && request.resource.data.friends.size() == 0
+        && request.resource.data.usernameLower.matches('^[a-z0-9_]+$')
+        && getAfter(usernamePath(request.resource.data.usernameLower)).data.uid == uid;
+
+      allow update: if isSignedIn()
+        && hasValidUserShape(uid, request.resource.data)
+        && request.resource.data.uid == resource.data.uid
+        && request.resource.data.username == resource.data.username
+        && (
+          !resource.data.keys().hasAny(['usernameLower'])
+          || request.resource.data.usernameLower == resource.data.usernameLower
+        )
+        && (
+          (
+            isSelf(uid)
+            && request.resource.data.diff(resource.data).changedKeys().hasOnly([
+                'email',
+                'emailNormalized',
+                'usernameLower',
+                'avatarId',
+                'friends',
+                'lastSeen',
+                'createdAt',
+                'updatedAt',
+                'profileVersion'
+              ])
+          )
+          ||
+          (
+            !isSelf(uid)
+            && request.resource.data.diff(resource.data).changedKeys().hasOnly(['friends', 'lastSeen', 'updatedAt'])
+            && (requesterAddedAsFriend() || requesterRemovedAsFriend())
+          )
+        );
+
+      allow delete: if false;
+
+      match /history/{historyId} {
+        allow read, create, update, delete: if isSelf(uid);
+      }
+
+      match /devices/{deviceId} {
+        allow read: if isSelf(uid) || isFriendOf(uid);
+
+        allow create, update: if isSelf(uid)
+          && request.resource.data.keys().hasOnly(['expoPushToken', 'platform', 'updatedAt'])
+          && isValidExpoPushToken(request.resource.data.expoPushToken)
+          && request.resource.data.platform is string
+          && request.resource.data.updatedAt is timestamp;
+
+        allow delete: if isSelf(uid);
+      }
+
+      match /friendRequests/{requesterUid} {
+        allow read: if isSelf(uid) || (isSignedIn() && request.auth.uid == requesterUid);
+
+        allow create: if isSignedIn()
+          && requesterUid == request.auth.uid
+          && uid != request.auth.uid
+          && exists(userPath(uid))
+          && exists(userPath(request.auth.uid))
+          && !(uid in get(userPath(request.auth.uid)).data.friends)
+          && !(request.auth.uid in get(userPath(uid)).data.friends)
+          && isPendingFriendRequestCreate(request.resource.data, requesterUid, uid)
+          && isPendingFriendRequestCreate(getAfter(outgoingRequestPath(requesterUid, uid)).data, requesterUid, uid);
+
+        allow update: if isSignedIn()
+          && (
+            (
+              isSelf(uid)
+              && (isFriendRequestTransition(request.resource.data, resource.data, 'accepted')
+                || isFriendRequestTransition(request.resource.data, resource.data, 'rejected'))
+            )
+            ||
+            (
+              request.auth.uid == requesterUid
+              && isFriendRequestTransition(request.resource.data, resource.data, 'cancelled')
+            )
+          )
+          && getAfter(outgoingRequestPath(requesterUid, uid)).data.status == request.resource.data.status;
+
+        allow delete: if false;
+      }
+
+      match /sentFriendRequests/{targetUid} {
+        allow read: if isSelf(uid) || (isSignedIn() && request.auth.uid == targetUid);
+
+        allow create: if isSelf(uid)
+          && uid != targetUid
+          && exists(userPath(uid))
+          && exists(userPath(targetUid))
+          && !(targetUid in get(userPath(uid)).data.friends)
+          && !(uid in get(userPath(targetUid)).data.friends)
+          && isPendingFriendRequestCreate(request.resource.data, uid, targetUid)
+          && isPendingFriendRequestCreate(getAfter(incomingRequestPath(targetUid, uid)).data, uid, targetUid);
+
+        allow update: if isSignedIn()
+          && (
+            (
+              isSelf(uid)
+              && isFriendRequestTransition(request.resource.data, resource.data, 'cancelled')
+            )
+            ||
+            (
+              request.auth.uid == targetUid
+              && (isFriendRequestTransition(request.resource.data, resource.data, 'accepted')
+                || isFriendRequestTransition(request.resource.data, resource.data, 'rejected'))
+            )
+          )
+          && getAfter(incomingRequestPath(targetUid, uid)).data.status == request.resource.data.status;
+
+        allow delete: if false;
+      }
+
+      match /lobbyInvites/{inviteId} {
+        allow read: if isSelf(uid);
+
+        allow create: if isSignedIn()
+          && hasLobbyInviteShape(request.resource.data, uid, inviteId)
+          && request.resource.data.status == 'pending'
+          && request.resource.data.respondedAt == null
+          && request.resource.data.hostUid == request.auth.uid
+          && getAfter(sessionPath(inviteId)).data.hostId == request.auth.uid
+          && getAfter(sessionPath(inviteId)).data.code == request.resource.data.lobbyCode;
+
+        allow update: if isSelf(uid)
+          && hasLobbyInviteShape(request.resource.data, uid, inviteId)
+          && request.resource.data.diff(resource.data).changedKeys().hasOnly(['status', 'updatedAt', 'respondedAt'])
+          && resource.data.status == 'pending'
+          && request.resource.data.updatedAt is timestamp
+          && (
+            (
+              request.resource.data.status in ['accepted', 'rejected', 'cancelled']
+              && request.resource.data.respondedAt is timestamp
+            )
+            ||
+            (
+              request.resource.data.status == 'expired'
+              && request.resource.data.respondedAt == resource.data.respondedAt
+            )
+          )
+          && request.resource.data.inviteId == resource.data.inviteId
+          && request.resource.data.lobbyId == resource.data.lobbyId
+          && request.resource.data.lobbyCode == resource.data.lobbyCode
+          && request.resource.data.hostUid == resource.data.hostUid
+          && request.resource.data.hostUsername == resource.data.hostUsername
+          && request.resource.data.recipientUid == resource.data.recipientUid
+          && request.resource.data.createdAt == resource.data.createdAt
+          && request.resource.data.expiresAt == resource.data.expiresAt;
+
+        allow delete: if false;
+      }
+    }
+
+    match /usernameIndex/{username} {
+      allow get: if isValidUsername(username) || isValidUsernameKey(username);
+      allow list: if false;
+
+      allow create: if isSignedIn()
+        && isValidUsernameKey(username)
+        && request.resource.data.keys().hasOnly([
+            'uid',
+            'username',
+            'usernameLower',
+            'emailNormalized',
+            'avatarId',
+            'createdAt',
+            'updatedAt'
+          ])
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.usernameLower == username
+        && isValidUsername(request.resource.data.username)
+        && isValidEmail(request.resource.data.emailNormalized)
+        && isValidAvatar(request.resource.data.avatarId)
+        && request.resource.data.createdAt is timestamp
+        && request.resource.data.updatedAt is timestamp
+        && !exists(usernamePath(username))
+        && getAfter(userPath(request.auth.uid)).data.username == request.resource.data.username
+        && getAfter(userPath(request.auth.uid)).data.usernameLower == username
+        && getAfter(userPath(request.auth.uid)).data.emailNormalized == request.resource.data.emailNormalized
+        && getAfter(userPath(request.auth.uid)).data.avatarId == request.resource.data.avatarId;
+
+      allow update: if isSignedIn()
+        && isValidUsernameKey(username)
+        && resource.data.uid == request.auth.uid
+        && request.resource.data.keys().hasOnly([
+            'uid',
+            'username',
+            'usernameLower',
+            'emailNormalized',
+            'avatarId',
+            'createdAt',
+            'updatedAt'
+          ])
+        && request.resource.data.uid == resource.data.uid
+        && request.resource.data.username == resource.data.username
+        && request.resource.data.usernameLower == resource.data.usernameLower
+        && request.resource.data.usernameLower == username
+        && isValidEmail(request.resource.data.emailNormalized)
+        && isValidAvatar(request.resource.data.avatarId)
+        && request.resource.data.createdAt == resource.data.createdAt
+        && request.resource.data.updatedAt is timestamp
+        && getAfter(userPath(request.auth.uid)).data.username == request.resource.data.username
+        && getAfter(userPath(request.auth.uid)).data.usernameLower == username
+        && getAfter(userPath(request.auth.uid)).data.emailNormalized == request.resource.data.emailNormalized
+        && getAfter(userPath(request.auth.uid)).data.avatarId == request.resource.data.avatarId;
+
+      allow delete: if false;
+    }
+
+    match /sessionCodes/{code} {
+      allow read: if isSignedIn();
+
+      allow create: if isSignedIn()
+        && isValidSessionCode(code)
+        && request.resource.data.keys().hasOnly(['sessionId', 'code', 'createdAt', 'updatedAt'])
+        && request.resource.data.sessionId is string
+        && request.resource.data.sessionId.size() > 0
+        && request.resource.data.code == code
+        && request.resource.data.createdAt is timestamp
+        && request.resource.data.updatedAt is timestamp
+        && getAfter(sessionPath(request.resource.data.sessionId)).data.hostId == request.auth.uid
+        && getAfter(sessionPath(request.resource.data.sessionId)).data.code == code;
+
+      allow update: if isSignedIn()
+        && isValidSessionCode(code)
+        && request.resource.data.keys().hasOnly(['sessionId', 'code', 'createdAt', 'updatedAt'])
+        && request.resource.data.sessionId == resource.data.sessionId
+        && request.resource.data.code == resource.data.code
+        && request.resource.data.createdAt == resource.data.createdAt
+        && request.resource.data.updatedAt is timestamp;
+
+      allow delete: if false;
+    }
+
+    match /sessions/{sessionId} {
+      function participantPath(participantId) {
+        return /databases/$(database)/documents/sessions/$(sessionId)/participants/$(participantId);
+      }
+
+      function isParticipantNow(participantId) {
+        return isSignedIn() && exists(participantPath(participantId));
+      }
+
+      function isParticipantAfterJoinWrite(participantId) {
+        return isSignedIn()
+          && getAfter(participantPath(participantId)).data != null
+          && getAfter(participantPath(participantId)).data.uid == participantId;
+      }
+
+      function isValidParticipantLocation(location) {
+        return location is map
+          && location.keys().hasOnly(['lat', 'lng'])
+          && location.lat is number
+          && location.lng is number
+          && location.lat >= -90
+          && location.lat <= 90
+          && location.lng >= -180
+          && location.lng <= 180;
+      }
+
+      function hasParticipantCreateShape(payload, participantId) {
+        return payload.keys().hasOnly(['uid', 'displayName', 'isReady', 'joinedAt', 'updatedAt', 'location'])
+          && payload.uid == participantId
+          && payload.displayName is string
+          && payload.displayName.size() >= 1
+          && payload.displayName.size() <= 64
+          && payload.isReady is bool
+          && payload.joinedAt is timestamp
+          && payload.updatedAt is timestamp
+          && (
+            !payload.keys().hasAny(['location'])
+            || isValidParticipantLocation(payload.location)
+          );
+      }
+
+      function hasParticipantUpdateShape(next, prev, participantId) {
+        return next.keys().hasOnly(['uid', 'displayName', 'isReady', 'joinedAt', 'updatedAt', 'location'])
+          && next.uid == participantId
+          && next.uid == prev.uid
+          && next.displayName == prev.displayName
+          && next.joinedAt == prev.joinedAt
+          && next.isReady is bool
+          && next.updatedAt is timestamp
+          && (
+            !next.keys().hasAny(['location'])
+            || isValidParticipantLocation(next.location)
+          );
+      }
+
+      function isJoinCounterMutation() {
+        return request.resource.data.diff(resource.data).changedKeys().hasOnly(['participantsCount', 'updatedAt'])
+          && request.resource.data.updatedAt is timestamp
+          && request.resource.data.participantsCount is number
+          && (
+            (
+              resource.data.participantsCount is number
+              && request.resource.data.participantsCount == resource.data.participantsCount + 1
+            )
+            ||
+            (
+              !(resource.data.participantsCount is number)
+              && request.resource.data.participantsCount >= 1
+            )
+          );
+      }
+
+      function isParticipantRecommendationsMutation() {
+        return request.resource.data.diff(resource.data).changedKeys().hasOnly(['recommendations', 'updatedAt'])
+          && request.resource.data.updatedAt is timestamp;
+      }
+
+      function isParticipantLeaveCounterMutation() {
+        return request.resource.data.diff(resource.data).changedKeys().hasOnly(['participantsCount', 'updatedAt'])
+          && request.resource.data.updatedAt is timestamp
+          && request.resource.data.participantsCount is number
+          && (
+            (
+              resource.data.participantsCount is number
+              && request.resource.data.participantsCount == resource.data.participantsCount - 1
+              && request.resource.data.participantsCount >= 0
+            )
+            ||
+            (
+              !(resource.data.participantsCount is number)
+              && request.resource.data.participantsCount == 0
+            )
+          );
+      }
+
+      function isExitWithCleanupMutation() {
+        let changed = request.resource.data.diff(resource.data).changedKeys();
+        return changed.hasOnly(['participantsCount', 'updatedAt', 'hostId', 'status'])
+          && request.resource.data.updatedAt is timestamp
+          && request.resource.data.participantsCount is number
+          && (
+            (
+              resource.data.participantsCount is number
+              && request.resource.data.participantsCount == resource.data.participantsCount - 1
+              && request.resource.data.participantsCount >= 0
+            )
+            ||
+            (
+              !(resource.data.participantsCount is number)
+              && request.resource.data.participantsCount == 0
+            )
+          )
+          && (
+            // Case 1: Host delegation — hostId changes, status stays same
+            (
+              changed.hasAny(['hostId'])
+              && request.resource.data.hostId is string
+              && request.resource.data.hostId.size() > 0
+              && request.resource.data.hostId != request.auth.uid
+              && (!changed.hasAny(['status']) || request.resource.data.status == resource.data.status)
+            )
+            ||
+            // Case 2: Last member leaving — status becomes ABANDONED
+            (
+              changed.hasAny(['status'])
+              && request.resource.data.status == 'ABANDONED'
+              && request.resource.data.participantsCount == 0
+            )
+            ||
+            // Case 3: Simple leave — only count + updatedAt change
+            (
+              !changed.hasAny(['hostId', 'status'])
+            )
+          );
+      }
+
+      allow read: if isSignedIn();
+
+      allow create: if isSignedIn()
+        && request.resource.data.keys().hasAll(['hostId', 'code', 'status', 'createdAt'])
+        && request.resource.data.hostId == request.auth.uid
+        && isValidSessionCode(request.resource.data.code);
+
+      allow update: if isSignedIn()
+        && (
+          request.auth.uid == resource.data.hostId
+          || (
+            isParticipantNow(request.auth.uid)
+            && (isParticipantRecommendationsMutation() || isParticipantLeaveCounterMutation() || isExitWithCleanupMutation())
+          )
+          || (isParticipantAfterJoinWrite(request.auth.uid) && isJoinCounterMutation())
+        );
+
+      allow delete: if isSignedIn() && request.auth.uid == resource.data.hostId;
+
+      match /participants/{participantId} {
+        allow read: if isSignedIn();
+
+        allow create: if isSignedIn()
+          && request.auth.uid == participantId
+          && hasParticipantCreateShape(request.resource.data, participantId);
+
+        allow update: if isSignedIn()
+          && request.auth.uid == participantId
+          && hasParticipantUpdateShape(request.resource.data, resource.data, participantId);
+
+        allow delete: if isSignedIn()
+          && (request.auth.uid == participantId || request.auth.uid == get(sessionPath(sessionId)).data.hostId);
+      }
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

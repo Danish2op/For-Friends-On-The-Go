@@ -1,0 +1,424 @@
+--------- beginning of system
+02-04 19:01:10.450  1856  1884 E ShortcutService: Invalid icon type in shortcut 145857190080691@lid. Bitmaps are not allowed in long-lived shortcuts. Use Resource icons, or Uri-based icons instead.
+02-04 19:01:27.713  1856  4551 E ShortcutService: Invalid icon type in shortcut 145857190080691@lid. Bitmaps are not allowed in long-lived shortcuts. Use Resource icons, or Uri-based icons instead.
+02-04 19:01:56.913  1856  2038 E ShortcutService: Invalid icon type in shortcut 145857190080691@lid. Bitmaps are not allowed in long-lived shortcuts. Use Resource icons, or Uri-based icons instead.
+02-04 19:02:13.663  1856  4530 E AppOps  : attributionTag  not declared in manifest of com.whatsapp
+02-04 19:02:13.664  1856  4530 E AppOps  : attributionTag  not declared in manifest of com.whatsapp
+02-04 19:02:13.667  1856  4530 E AppOps  : attributionTag  not declared in manifest of com.whatsapp
+02-04 19:02:13.668  1856  4530 E AppOps  : attributionTag  not declared in manifest of com.whatsapp
+--------- beginning of main
+02-04 19:02:26.152  1451  1572 E WifiHAL : Creating message to get cached scan results
+02-04 19:02:29.359  1451  1572 E WifiHAL : Creating message to get cached scan results
+02-04 19:02:42.617 16790 12843 E m55.qoa : *~*~*~ Previous channel {0} was garbage collected without being shut down! ~*~*~*
+02-04 19:02:42.617 16790 12843 E m55.qoa :     Make sure to call shutdown()/shutdownNow()
+02-04 19:02:42.617 16790 12843 E m55.qoa : java.lang.RuntimeException: ManagedChannel allocation site
+02-04 19:02:42.617 16790 12843 E m55.qoa : 	at m55.qnz.<init>(:com.google.android.gms.optional_play_cloud_search@260235017@26.02.35 (100000-0):21)
+02-04 19:02:42.617 16790 12843 E m55.qoa : 	at m55.qoa.<init>(:com.google.android.gms.optional_play_cloud_search@260235017@26.02.35 (100000-0):10)
+02-04 19:02:42.617 16790 12843 E m55.qoa : 	at m55.pyn.a(:com.google.android.gms.optional_play_cloud_search@260235017@26.02.35 (100000-0):260)
+02-04 19:02:42.617 16790 12843 E m55.qoa : 	at m55.hyk.a(:com.google.android.gms.optional_play_cloud_search@260235017@26.02.35 (100000-0):159)
+02-04 19:02:42.617 16790 12843 E m55.qoa : 	at m55.mnd.a(:com.google.android.gms.optional_play_cloud_search@260235017@26.02.35 (100000-0):212)
+02-04 19:02:42.617 16790 12843 E m55.qoa : 	at m55.kfk.a(:com.google.android.gms.optional_play_cloud_search@260235017@26.02.35 (100000-0):13)
+02-04 19:02:42.617 16790 12843 E m55.qoa : 	at m55.mcc.a(:com.google.android.gms.optional_play_cloud_search@260235017@26.02.35 (100000-0):3)
+02-04 19:02:42.617 16790 12843 E m55.qoa : 	at m55.mbf.run(:com.google.android.gms.optional_play_cloud_search@260235017@26.02.35 (100000-0):19)
+02-04 19:02:42.617 16790 12843 E m55.qoa : 	at m55.mce.run(:com.google.android.gms.optional_play_cloud_search@260235017@26.02.35 (100000-0):5)
+02-04 19:02:42.617 16790 12843 E m55.qoa : 	at m55.ajh.c(:com.google.android.gms.optional_play_cloud_search@260235017@26.02.35 (100000-0):50)
+02-04 19:02:42.617 16790 12843 E m55.qoa : 	at m55.ajh.run(:com.google.android.gms.optional_play_cloud_search@260235017@26.02.35 (100000-0):73)
+02-04 19:02:42.617 16790 12843 E m55.qoa : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1154)
+02-04 19:02:42.617 16790 12843 E m55.qoa : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:652)
+02-04 19:02:42.617 16790 12843 E m55.qoa : 	at bewn.run(:com.google.android.gms@260235035@26.02.35 (260400-862924022):8)
+02-04 19:02:42.617 16790 12843 E m55.qoa : 	at java.lang.Thread.run(Thread.java:1563)
+02-04 19:02:44.515 13341 13363 E ashmem  : Pinning is deprecated since Android Q. Please use trim or other methods.
+02-04 19:02:45.099  1856  1884 E AppOps  : Bad call made by uid 1001. Package "com.android.phone" does not belong to uid 10178.
+02-04 19:02:45.099  1856  1884 E AppOps  : Cannot noteOperation
+02-04 19:02:45.099  1856  1884 E AppOps  : java.lang.SecurityException: Specified package "com.android.phone" under uid 10178 but it is not
+02-04 19:02:45.099  1856  1884 E AppOps  : 	at com.android.server.appop.AppOpsService.verifyAndGetBypass(AppOpsService.java:5033)
+02-04 19:02:45.099  1856  1884 E AppOps  : 	at com.android.server.appop.AppOpsService.verifyAndGetBypass(AppOpsService.java:4894)
+02-04 19:02:45.099  1856  1884 E AppOps  : 	at com.android.server.appop.AppOpsService.noteOperationUnchecked(AppOpsService.java:3409)
+02-04 19:02:45.099  1856  1884 E AppOps  : 	at com.android.server.appop.AppOpsService.noteOperationImpl(AppOpsService.java:3396)
+02-04 19:02:45.099  1856  1884 E AppOps  : 	at com.android.server.appop.AppOpsService.-$$Nest$mnoteOperationImpl(AppOpsService.java:0)
+02-04 19:02:45.099  1856  1884 E AppOps  : 	at com.android.server.appop.AppOpsService$CheckOpsDelegateDispatcher.$r8$lambda$eTKLGbByFLiOzK62QHhpSvtx4do(AppOpsService.java:0)
+02-04 19:02:45.099  1856  1884 E AppOps  : 	at com.android.server.appop.AppOpsService$CheckOpsDelegateDispatcher$$ExternalSyntheticLambda5.apply(R8$$SyntheticClass:0)
+02-04 19:02:45.099  1856  1884 E AppOps  : 	at com.android.server.policy.AppOpsPolicy.noteOperation(AppOpsPolicy.java:254)
+02-04 19:02:45.099  1856  1884 E AppOps  : 	at com.android.server.appop.AppOpsService$CheckOpsDelegateDispatcher.noteOperation(AppOpsService.java:7918)
+02-04 19:02:45.099  1856  1884 E AppOps  : 	at com.android.server.appop.AppOpsService.noteOperation(AppOpsService.java:3343)
+02-04 19:02:45.099  1856  1884 E AppOps  : 	at com.android.internal.app.IAppOpsService$Stub.onTransact(IAppOpsService.java:585)
+02-04 19:02:45.099  1856  1884 E AppOps  : 	at android.os.Binder.execTransactInternal(Binder.java:1478)
+02-04 19:02:45.099  1856  1884 E AppOps  : 	at android.os.Binder.execTransact(Binder.java:1418)
+02-04 19:02:45.113  1856  2760 E AppOps  : attributionTag IWLAN not declared in manifest of com.google.android.iwlan
+02-04 19:02:46.429  1451  1572 E WifiHAL : Creating message to get cached scan results
+02-04 19:02:50.379   854  2816 E powerhal-libperfmgr: Error: shouldn't report duration during pause state.
+02-04 19:02:51.031  6807  6908 E msys    : E[N mns]_CacheRefreshTimerCallback(454)=>Start active cache refresh DNS resolution
+02-04 19:02:51.032  6807  6908 E msys    : E[N mns]_CacheRefreshTimerCallback(454)=>Start active cache refresh DNS resolution
+02-04 19:02:51.032  6807  6908 E msys    : E[N mns]_CacheRefreshTimerCallback(454)=>Start active cache refresh DNS resolution
+02-04 19:02:51.032  6807  6908 E msys    : E[N mns]_CacheRefreshTimerCallback(454)=>Start active cache refresh DNS resolution
+02-04 19:02:51.033  6807  6908 E msys    : E[N mns]_CacheRefreshTimerCallback(454)=>Start active cache refresh DNS resolution
+02-04 19:02:51.033  6807  6908 E msys    : E[N mns]_CacheRefreshTimerCallback(454)=>Start active cache refresh DNS resolution
+02-04 19:02:51.067  6807  6908 E msys    : E[N mns]_LogError(228)=>Failed to resolve using system DNS resolver, getaddrinfo(): No address associated with hostname
+02-04 19:02:51.079  6807  6908 E msys    : E[N mns]_OnSystemDNSSuccessCallback(340)=>Cache refresh succeeded with system DNS resolver. IP count: 2
+02-04 19:02:51.092  6807  6908 E msys    : E[N mns]_OnSystemDNSSuccessCallback(340)=>Cache refresh succeeded with system DNS resolver. IP count: 2
+02-04 19:02:51.108  6807  6807 E SlowAppComponent: 0ms: IgBgFetchSchedulerService instantiating…
+02-04 19:02:51.108  6807  6807 E SlowAppComponent: Main thread was blocked for 60ms in the background starting with IgBgFetchSchedulerService
+02-04 19:02:51.119  6807  8675 E msys    : E[N mccw.liger]onConnectError(579)=>connect/error - address: 2a03:2880:f311:24:face:b00c:0:6e2e, port: 5222, ex: folly::AsyncSocketException: AsyncSocketException: connect timed out after 9999ms, type = Timed out
+02-04 19:02:51.130  6807  8675 E msys    : E[N mccw.liger]onConnectError(579)=>connect/error - address: 2a03:2880:f311:24:face:b00c:0:6e2e, port: 443, ex: folly::AsyncSocketException: AsyncSocketException: connect timed out after 9999ms, type = Timed out
+02-04 19:02:51.134  6807  7090 E msys    : E[S MSync]_ModularSyncHandleNetworkResponse(1691)=>DB[223] - Encountered a network error (2002: TransientError domain: MNSQUICConnection code: 1 detail: Local error: 1073741845: 35 seconds)
+02-04 19:02:51.134  6807  7090 E msys    : E[S MSync]_ModularSyncHandleNetworkErrorResponse(1406)=>DB[223] - handle network error response
+02-04 19:02:51.169  6807  6966 E msys    : E[N mns]_OnDiskCacheGetData(632)=>Start post callback cache refresh DNS resolution
+02-04 19:02:51.304  6807  7080 E msys    : E[N WA]_WCCConnectionDefaultLifecycleEventHandler(2076)=>[INFO] connection/xmpp/lifecycle_event/did-connect, [31.4426s]
+02-04 19:02:51.307  6807  6908 E msys    : E[N mns]_OnSystemDNSSuccessCallback(340)=>Cache refresh succeeded with system DNS resolver. IP count: 2
+02-04 19:02:51.310  6807  6908 E msys    : E[N mns]_OnSystemDNSSuccessCallback(340)=>Cache refresh succeeded with system DNS resolver. IP count: 2
+02-04 19:02:51.313  6807  6908 E msys    : E[N mns]_OnSystemDNSSuccessCallback(340)=>Cache refresh succeeded with system DNS resolver. IP count: 2
+02-04 19:02:51.317  6807  7080 E msys    : E[N WA]_WCCConnectionDefaultLifecycleEventHandler(2076)=>[INFO] connection/xmpp/lifecycle_event/did-send-initial-payload, [0.0126s]
+02-04 19:02:51.324  6807  6966 E msys    : E[N mns]_OnSystemDNSSuccessCallback(340)=>Cache refresh succeeded with system DNS resolver. IP count: 2
+02-04 19:02:51.324  6807  7095 E msys    : E[N MCCWLigerStream]_NetworkChangedCallbackInternal(57)=>skip the network state change source=3
+02-04 19:02:51.328  6807  8669 E msys    : E[C mem.context]_NetworkStateChangedCallbackOnExecutionContext(7806)=>[INFO]skip the network state change source=3
+02-04 19:02:51.636  6807  7080 E msys    : E[N WA]_WCCConnectionDefaultLifecycleEventHandler(2076)=>[INFO] connection/xmpp/lifecycle_event/will-handshake, [0.3188s]
+02-04 19:02:51.642  6807  7080 E msys    : E[N WA]_WCCConnectionDefaultLifecycleEventHandler(2076)=>[INFO] connection/xmpp/lifecycle_event/did-handshake, [0.0054s]
+02-04 19:02:51.643  6807  7080 E msys    : E[N WA]_WCCConnectionDefaultReceiveHandler(2236)=>[INFO] connection/receive/login-success
+02-04 19:02:51.643  6807  7080 E msys    : E[N WA]_WCCConnectionDefaultEmitStateChange(3059)=>[INFO] connection/new_state/connected [connection_id=72582117, wcc_source=1, wcc_reason=18]
+02-04 19:02:51.727  6807  6908 E msys    : E[N mns]_OnDiskCacheGetData(632)=>Start post callback cache refresh DNS resolution
+02-04 19:02:51.803  6807  6908 E msys    : E[N mns]_OnSystemDNSSuccessCallback(340)=>Cache refresh succeeded with system DNS resolver. IP count: 2
+02-04 19:02:54.818  6807  6908 E msys    : E[N mns]_OnDiskCacheGetData(632)=>Start post callback cache refresh DNS resolution
+02-04 19:02:54.881  6807  6908 E msys    : E[N mns]_OnDiskCacheGetData(632)=>Start post callback cache refresh DNS resolution
+02-04 19:02:54.882  6807  6908 E msys    : E[N mns]_OnDiskCacheGetData(632)=>Start post callback cache refresh DNS resolution
+02-04 19:02:54.896  6807  6908 E msys    : E[N mns]_OnSystemDNSSuccessCallback(340)=>Cache refresh succeeded with system DNS resolver. IP count: 2
+02-04 19:02:54.897  6807  6908 E msys    : E[N mns]_OnSystemDNSSuccessCallback(340)=>Cache refresh succeeded with system DNS resolver. IP count: 2
+02-04 19:02:54.897  6807  6908 E msys    : E[N mns]_OnDiskCacheGetData(632)=>Start post callback cache refresh DNS resolution
+02-04 19:02:54.905  6807  6908 E msys    : E[N mns]_OnSystemDNSSuccessCallback(340)=>Cache refresh succeeded with system DNS resolver. IP count: 2
+02-04 19:02:54.973  6807  6908 E msys    : E[N mns]_OnSystemDNSSuccessCallback(340)=>Cache refresh succeeded with system DNS resolver. IP count: 2
+02-04 19:02:55.174  6807 13498 E IdleQueuePayloadBasedServiceLayer: Request empty, but still some servings left: 432507
+02-04 19:02:55.203  6807 13498 E IdleQueuePayloadBasedServiceLayer: Request empty, but still some servings left: -29648
+02-04 19:02:55.225  6807 13498 E IdleQueuePayloadBasedServiceLayer: Request empty, but still some servings left: -35768
+02-04 19:02:55.230  6807  7104 E IdleQueuePayloadBasedServiceLayer: Request empty, but still some servings left: 286263
+02-04 19:02:55.272  6807  7104 E IdleQueuePayloadBasedServiceLayer: Request empty, but still some servings left: -100859
+02-04 19:02:55.442  6807 13498 E IdleQueuePayloadBasedServiceLayer: Request empty, but still some servings left: -513146
+02-04 19:02:55.453  6807  6908 E msys    : E[N mns]_OnDiskCacheGetData(632)=>Start post callback cache refresh DNS resolution
+02-04 19:02:55.468  6807 13498 E IdleQueuePayloadBasedServiceLayer: Request empty, but still some servings left: -20609
+02-04 19:02:55.509  6807  6908 E msys    : E[N mns]_OnSystemDNSSuccessCallback(340)=>Cache refresh succeeded with system DNS resolver. IP count: 2
+02-04 19:02:55.583  6807  8683 E IdleQueuePayloadBasedServiceLayer: Request empty, but still some servings left: -18740
+02-04 19:02:56.650  1451  1451 E WifiHAL : Creating message to get cached scan results
+02-04 19:02:57.834  6807  6908 E msys    : E[N mns]_OnDiskCacheGetData(632)=>Start post callback cache refresh DNS resolution
+02-04 19:02:57.896  6807  6908 E msys    : E[N mns]_OnSystemDNSSuccessCallback(340)=>Cache refresh succeeded with system DNS resolver. IP count: 2
+02-04 19:02:59.233  6807  6908 E msys    : E[N mns]_OnDiskCacheGetData(632)=>Start post callback cache refresh DNS resolution
+02-04 19:02:59.243  6807  6908 E msys    : E[N mns]_OnSystemDNSSuccessCallback(340)=>Cache refresh succeeded with system DNS resolver. IP count: 2
+02-04 19:03:04.051  1451  1572 E WifiHAL : Creating message to get cached scan results
+02-04 19:03:04.458  6807  8675 E msys    : E[N mccw.liger]onReadError(732)=>read/error - ex: AsyncSocketException: recv() failed (peer=[2a03:2880:f311:24:face:b00c:0:6e2e]:80), type = Internal error, errno = 103 (Software caused connection abort), errno: 103
+02-04 19:03:04.460  6807  7080 E msys    : E[N WA]_WCCXMPPStreamDisconnectHandler(335)=>xmpp/disconnect - WCIStreamStateErrorCode: 2, domain: WCIStreamState, subdomain: MCCWLigerStream: Error Domain=WCIStreamState Code=2 UserInfo=0xb4000073e57445f0 {MCFErrorDirectUnderlyingErrorKey=0xb400007245acd610 "Error Domain=MCCWLigerStream Code=2 UserInfo=0xb4000073e573bc20 {MCFErrorDirectLocalizedFailureReasonKey=AsyncSocketException: recv() failed (peer=[2a03:2880:f311:24:face:b00c:0:6e2e]:80), type = Internal error, errno = 103 (Software caused connection abort)}"}
+02-04 19:03:04.460  6807  7080 E msys    : E[N WA]_WCCConnectionDefaultLifecycleEventHandler(2076)=>[INFO] connection/xmpp/lifecycle_event/not-connected, [12.8187s]
+02-04 19:03:04.460  6807  7080 E msys    : E[N WA]_WCCXMPPStreamDoDisconnect(1223)=>xmpp/disconnect - flags: 256
+02-04 19:03:04.461  6807  7080 E msys    : E[N WA]_WCCConnectionDefaultDisconnectHandler(2182)=>connection/disconnected, peer reset
+02-04 19:03:04.461  6807  7080 E msys    : E[N WA]_WCCConnectionDefaultEmitStateChange(3059)=>[INFO] connection/new_state/not-connected [connection_id=72582117, wcc_source=1, wcc_reason=18]
+02-04 19:03:04.463  6807  7080 E msys    : E[C 1]MCCLogErrorWithTraceOrQPL(281)=>8/374/3970/65536
+02-04 19:03:04.463  6807  7080 E msys    : E[C 1]MCCLogErrorWithTraceOrQPL(281)=>8/374/3972/18
+02-04 19:03:04.463  6807  7080 E msys    : E[C mem.context]_LogConnectFailure(4893)=>Establishing connection failure reason and flags: disconnect/Doze/-1/reason/18/flags/65536/[-, -, -, -, -, -, -, -, -, peer_reset, -, -, -, -]
+02-04 19:03:04.464  6807  7080 E msys    : E[C mem.context]_LogConnectFailure(4925)=>[Happy Eyeball] Connect failed with source=1, winner stream ip=2a03:2880:f311:24:face:b00c:0:6e2e, port=80, dnsResolutionMethod=1, combined_ip_addresses=2a03:2880:f311:24:face:b00c:0:6e2e, 57.144.40.36
+02-04 19:03:04.465  6807  7080 E msys    : E[N WA]_WCCConnectionDefaultDisconnectHandler(2207)=>[INFO] connection/disconnected/[did-connect, did-read-bytes]
+02-04 19:03:04.467  6807  7080 E msys    : E[N WA]_WCCConnectionDefaultEmitStateChange(3059)=>[INFO] connection/new_state/connecting [connection_id=72582118, wcc_source=1, wcc_reason=18]
+02-04 19:03:04.489  6807  7080 E msys    : E[N WA]_WCCConnectionDefaultDoConnectWithAuthKeys(1494)=>[INFO] connection/connect/start/[host=z-p42-chat-e2ee-ig.facebook.com port=5222]/[57.144.40.36:5222]
+02-04 19:03:04.490  6807  7080 E msys    : E[N WA]_WCCConnectionDefaultLifecycleEventHandler(2068)=>[INFO] connection/xmpp/lifecycle_event/will-connect
+02-04 19:03:04.490  6807  7080 E msys    : E[A WA]WCCHandshakeCreate(178)=>handshake/create, pq mode:0
+02-04 19:03:09.751  1856  3088 E AppOps  : Bad call made by uid 1001. Package "com.android.phone" does not belong to uid 10178.
+02-04 19:03:09.751  1856  3088 E AppOps  : Cannot noteOperation
+02-04 19:03:09.751  1856  3088 E AppOps  : java.lang.SecurityException: Specified package "com.android.phone" under uid 10178 but it is not
+02-04 19:03:09.751  1856  3088 E AppOps  : 	at com.android.server.appop.AppOpsService.verifyAndGetBypass(AppOpsService.java:5033)
+02-04 19:03:09.751  1856  3088 E AppOps  : 	at com.android.server.appop.AppOpsService.verifyAndGetBypass(AppOpsService.java:4894)
+02-04 19:03:09.751  1856  3088 E AppOps  : 	at com.android.server.appop.AppOpsService.noteOperationUnchecked(AppOpsService.java:3409)
+02-04 19:03:09.751  1856  3088 E AppOps  : 	at com.android.server.appop.AppOpsService.noteOperationImpl(AppOpsService.java:3396)
+02-04 19:03:09.751  1856  3088 E AppOps  : 	at com.android.server.appop.AppOpsService.-$$Nest$mnoteOperationImpl(AppOpsService.java:0)
+02-04 19:03:09.751  1856  3088 E AppOps  : 	at com.android.server.appop.AppOpsService$CheckOpsDelegateDispatcher.$r8$lambda$eTKLGbByFLiOzK62QHhpSvtx4do(AppOpsService.java:0)
+02-04 19:03:09.751  1856  3088 E AppOps  : 	at com.android.server.appop.AppOpsService$CheckOpsDelegateDispatcher$$ExternalSyntheticLambda5.apply(R8$$SyntheticClass:0)
+02-04 19:03:09.751  1856  3088 E AppOps  : 	at com.android.server.policy.AppOpsPolicy.noteOperation(AppOpsPolicy.java:254)
+02-04 19:03:09.751  1856  3088 E AppOps  : 	at com.android.server.appop.AppOpsService$CheckOpsDelegateDispatcher.noteOperation(AppOpsService.java:7918)
+02-04 19:03:09.751  1856  3088 E AppOps  : 	at com.android.server.appop.AppOpsService.noteOperation(AppOpsService.java:3343)
+02-04 19:03:09.751  1856  3088 E AppOps  : 	at com.android.internal.app.IAppOpsService$Stub.onTransact(IAppOpsService.java:585)
+02-04 19:03:09.751  1856  3088 E AppOps  : 	at android.os.Binder.execTransactInternal(Binder.java:1478)
+02-04 19:03:09.751  1856  3088 E AppOps  : 	at android.os.Binder.execTransact(Binder.java:1418)
+02-04 19:03:09.798  1856  3088 E AppOps  : attributionTag IWLAN not declared in manifest of com.google.android.iwlan
+02-04 19:03:09.868 16790 13545 E AuthPII : [RequestTokenManager] getToken() -> BAD_AUTHENTICATION. App: com.google.android.gms, Service: oauth2:https://www.googleapis.com/auth/webhistory
+02-04 19:03:09.868 16790 13545 E AuthPII : bdkm: Long live credential not available.
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at aexp.a(:com.google.android.gms@260235035@26.02.35 (260400-862924022):1351)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at aexw.b(:com.google.android.gms@260235035@26.02.35 (260400-862924022):26)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at aexu.a(:com.google.android.gms@260235035@26.02.35 (260400-862924022):744)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at aext.b(:com.google.android.gms@260235035@26.02.35 (260400-862924022):142)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at yhs.d(:com.google.android.gms@260235035@26.02.35 (260400-862924022):662)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at aeai.a(:com.google.android.gms@260235035@26.02.35 (260400-862924022):33)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at aeao.m(:com.google.android.gms@260235035@26.02.35 (260400-862924022):34)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at aeao.o(:com.google.android.gms@260235035@26.02.35 (260400-862924022):64)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at aeao.h(:com.google.android.gms@260235035@26.02.35 (260400-862924022):4)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at aepp.d(:com.google.android.gms@260235035@26.02.35 (260400-862924022):42)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at aepp.b(:com.google.android.gms@260235035@26.02.35 (260400-862924022):6)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at etxx.a(:com.google.android.gms@260235035@26.02.35 (260400-862924022):26)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at etxg.a(:com.google.android.gms@260235035@26.02.35 (260400-862924022):59)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at gvzt.d(:com.google.android.gms@260235035@26.02.35 (260400-862924022):3)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at gvzv.run(:com.google.android.gms@260235035@26.02.35 (260400-862924022):38)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at gwbh.execute(:com.google.android.gms@260235035@26.02.35 (260400-862924022):1)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at gwcp.hy(:com.google.android.gms@260235035@26.02.35 (260400-862924022):6)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at gwbv.hy(:com.google.android.gms@260235035@26.02.35 (260400-862924022):3)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at gvzv.g(:com.google.android.gms@260235035@26.02.35 (260400-862924022):10)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at etxf.a(:com.google.android.gms@260235035@26.02.35 (260400-862924022):20)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at gwbo.a(:com.google.android.gms@260235035@26.02.35 (260400-862924022):20)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at gwds.a(:com.google.android.gms@260235035@26.02.35 (260400-862924022):3)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at gwct.run(:com.google.android.gms@260235035@26.02.35 (260400-862924022):19)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at gwdu.run(:com.google.android.gms@260235035@26.02.35 (260400-862924022):5)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at gwbq.run(:com.google.android.gms@260235035@26.02.35 (260400-862924022):53)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at gwbh.execute(:com.google.android.gms@260235035@26.02.35 (260400-862924022):1)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at gwbq.execute(:com.google.android.gms@260235035@26.02.35 (260400-862924022):76)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at gvzi.f(:com.google.android.gms@260235035@26.02.35 (260400-862924022):1)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at gvzi.hy(:com.google.android.gms@260235035@26.02.35 (260400-862924022):41)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at gwbs.b(:com.google.android.gms@260235035@26.02.35 (260400-862924022):33)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at etxo.a(:com.google.android.gms@260235035@26.02.35 (260400-862924022):10)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at etwo.a(:com.google.android.gms@260235035@26.02.35 (260400-862924022):3)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at etvh.c(:com.google.android.gms@260235035@26.02.35 (260400-862924022):9)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at etwe.b(:com.google.android.gms@260235035@26.02.35 (260400-862924022):81)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at etuu.b(:com.google.android.gms@260235035@26.02.35 (260400-862924022):614)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at etum.n(:com.google.android.gms@260235035@26.02.35 (260400-862924022):357)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at etum.l(:com.google.android.gms@260235035@26.02.35 (260400-862924022):159)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at etum.p(:com.google.android.gms@260235035@26.02.35 (260400-862924022):50)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at etum.d(:com.google.android.gms@260235035@26.02.35 (260400-862924022):1452)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at etue.ks(:com.google.android.gms@260235035@26.02.35 (260400-862924022):9)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at gwca.run(:com.google.android.gms@260235035@26.02.35 (260400-862924022):29)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at beqw.c(:com.google.android.gms@260235035@26.02.35 (260400-862924022):50)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at beqw.run(:com.google.android.gms@260235035@26.02.35 (260400-862924022):92)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1154)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:652)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at bewn.run(:com.google.android.gms@260235035@26.02.35 (260400-862924022):8)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at java.lang.Thread.run(Thread.java:1563)
+02-04 19:03:09.868 16790 13545 E AuthPII : Message is Long live credential not available.
+02-04 19:03:09.868 16790 13545 E AuthPII : bdkm: Long live credential not available.
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at aexp.a(:com.google.android.gms@260235035@26.02.35 (260400-862924022):1351)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at aexw.b(:com.google.android.gms@260235035@26.02.35 (260400-862924022):26)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at aexu.a(:com.google.android.gms@260235035@26.02.35 (260400-862924022):744)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at aext.b(:com.google.android.gms@260235035@26.02.35 (260400-862924022):142)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at yhs.d(:com.google.android.gms@260235035@26.02.35 (260400-862924022):662)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at aeai.a(:com.google.android.gms@260235035@26.02.35 (260400-862924022):33)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at aeao.m(:com.google.android.gms@260235035@26.02.35 (260400-862924022):34)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at aeao.o(:com.google.android.gms@260235035@26.02.35 (260400-862924022):64)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at aeao.h(:com.google.android.gms@260235035@26.02.35 (260400-862924022):4)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at aepp.d(:com.google.android.gms@260235035@26.02.35 (260400-862924022):42)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at aepp.b(:com.google.android.gms@260235035@26.02.35 (260400-862924022):6)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at etxx.a(:com.google.android.gms@260235035@26.02.35 (260400-862924022):26)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at etxg.a(:com.google.android.gms@260235035@26.02.35 (260400-862924022):59)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at gvzt.d(:com.google.android.gms@260235035@26.02.35 (260400-862924022):3)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at gvzv.run(:com.google.android.gms@260235035@26.02.35 (260400-862924022):38)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at gwbh.execute(:com.google.android.gms@260235035@26.02.35 (260400-862924022):1)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at gwcp.hy(:com.google.android.gms@260235035@26.02.35 (260400-862924022):6)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at gwbv.hy(:com.google.android.gms@260235035@26.02.35 (260400-862924022):3)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at gvzv.g(:com.google.android.gms@260235035@26.02.35 (260400-862924022):10)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at etxf.a(:com.google.android.gms@260235035@26.02.35 (260400-862924022):20)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at gwbo.a(:com.google.android.gms@260235035@26.02.35 (260400-862924022):20)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at gwds.a(:com.google.android.gms@260235035@26.02.35 (260400-862924022):3)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at gwct.run(:com.google.android.gms@260235035@26.02.35 (260400-862924022):19)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at gwdu.run(:com.google.android.gms@260235035@26.02.35 (260400-862924022):5)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at gwbq.run(:com.google.android.gms@260235035@26.02.35 (260400-862924022):53)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at gwbh.execute(:com.google.android.gms@260235035@26.02.35 (260400-862924022):1)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at gwbq.execute(:com.google.android.gms@260235035@26.02.35 (260400-862924022):76)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at gvzi.f(:com.google.android.gms@260235035@26.02.35 (260400-862924022):1)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at gvzi.hy(:com.google.android.gms@260235035@26.02.35 (260400-862924022):41)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at gwbs.b(:com.google.android.gms@260235035@26.02.35 (260400-862924022):33)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at etxo.a(:com.google.android.gms@260235035@26.02.35 (260400-862924022):10)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at etwo.a(:com.google.android.gms@260235035@26.02.35 (260400-862924022):3)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at etvh.c(:com.google.android.gms@260235035@26.02.35 (260400-862924022):9)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at etwe.b(:com.google.android.gms@260235035@26.02.35 (260400-862924022):81)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at etuu.b(:com.google.android.gms@260235035@26.02.35 (260400-862924022):614)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at etum.n(:com.google.android.gms@260235035@26.02.35 (260400-862924022):357)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at etum.l(:com.google.android.gms@260235035@26.02.35 (260400-862924022):159)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at etum.p(:com.google.android.gms@260235035@26.02.35 (260400-862924022):50)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at etum.d(:com.google.android.gms@260235035@26.02.35 (260400-862924022):1452)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at etue.ks(:com.google.android.gms@260235035@26.02.35 (260400-862924022):9)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at gwca.run(:com.google.android.gms@260235035@26.02.35 (260400-862924022):29)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at beqw.c(:com.google.android.gms@260235035@26.02.35 (260400-862924022):50)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at beqw.run(:com.google.android.gms@260235035@26.02.35 (260400-862924022):92)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1154)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:652)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at bewn.run(:com.google.android.gms@260235035@26.02.35 (260400-862924022):8)
+02-04 19:03:09.868 16790 13545 E AuthPII : 	at java.lang.Thread.run(Thread.java:1563)
+02-04 19:03:11.129  1451  1451 E WifiHAL : Creating message to get cached scan results
+02-04 19:03:11.266 13561 13561 E libc    : SetHeapTaggingLevel: re-enabling tagging after it was disabled is not supported
+02-04 19:03:11.491 13561 13578 E ashmem  : readlink(/proc/self/fd/107) failed: Operation not permitted
+02-04 19:03:11.491 13561 13578 E ashmem  : readlink(/proc/self/fd/107) failed: Operation not permitted
+02-04 19:03:11.495 13561 13578 E ashmem  : readlink(/proc/self/fd/107) failed: Operation not permitted
+02-04 19:03:11.496 13561 13578 E ashmem  : readlink(/proc/self/fd/108) failed: Operation not permitted
+02-04 19:03:11.497 13561 13578 E ashmem  : readlink(/proc/self/fd/109) failed: Operation not permitted
+02-04 19:03:11.498 13561 13613 E ashmem  : readlink(/proc/self/fd/113) failed: Operation not permitted
+02-04 19:03:11.500 13561 13613 E ashmem  : readlink(/proc/self/fd/121) failed: Operation not permitted
+02-04 19:03:11.500 13561 13613 E ashmem  : readlink(/proc/self/fd/123) failed: Operation not permitted
+02-04 19:03:11.568 13561 13611 E ashmem  : readlink(/proc/self/fd/98) failed: Operation not permitted
+02-04 19:03:11.569 13561 13611 E ashmem  : readlink(/proc/self/fd/126) failed: Operation not permitted
+02-04 19:03:11.593 13561 13611 E ashmem  : readlink(/proc/self/fd/128) failed: Operation not permitted
+02-04 19:03:11.595 13561 13611 E ashmem  : readlink(/proc/self/fd/130) failed: Operation not permitted
+02-04 19:03:11.597 13561 13611 E ashmem  : readlink(/proc/self/fd/132) failed: Operation not permitted
+02-04 19:03:11.599 13561 13611 E ashmem  : readlink(/proc/self/fd/131) failed: Operation not permitted
+02-04 19:03:11.681 13341 13341 E chromium: [ERROR:components/page_load_metrics/browser/page_load_metrics_update_dispatcher.cc:179] Invalid first_paint (unset) for first_image_paint 0.172 s
+02-04 19:03:11.713 13341 13341 E chromium: [ERROR:components/page_load_metrics/browser/page_load_metrics_update_dispatcher.cc:179] Invalid first_paint 0.249 s for first_image_paint 0.172 s
+02-04 19:03:11.725  1856  4495 E ShortcutService: Invalid icon type in shortcut 145857190080691@lid. Bitmaps are not allowed in long-lived shortcuts. Use Resource icons, or Uri-based icons instead.
+02-04 19:03:11.813 13341 13341 E chromium: [ERROR:components/page_load_metrics/browser/page_load_metrics_update_dispatcher.cc:179] Invalid first_paint 0.249 s for first_image_paint 0.172 s
+02-04 19:03:12.168  1451  1572 E WifiHAL : Creating message to get cached scan results
+02-04 19:03:12.608 13341 13341 E chromium: [ERROR:components/page_load_metrics/browser/page_load_metrics_update_dispatcher.cc:179] Invalid first_paint 0.249 s for first_image_paint 0.172 s
+02-04 19:03:13.926  1451  1451 E WifiHAL : Creating message to get cached scan results
+02-04 19:03:15.055  1451  1572 E WifiHAL : Creating message to get cached scan results
+02-04 19:03:15.832  6807  8675 E msys    : E[N mccw.liger]onConnectError(579)=>connect/error - address: 2a03:2880:f311:24:face:b00c:0:6e2e, port: 5222, ex: folly::AsyncSocketException: AsyncSocketException: connect timed out after 9999ms, type = Timed out
+02-04 19:03:15.893  6807  8675 E msys    : E[N mccw.liger]onConnectError(579)=>connect/error - address: 2a03:2880:f311:24:face:b00c:0:6e2e, port: 443, ex: folly::AsyncSocketException: AsyncSocketException: connect timed out after 9999ms, type = Timed out
+02-04 19:03:15.940  6807  6807 E SlowAppComponent: 0ms: FirebaseInstanceIdReceiver instantiating…
+02-04 19:03:15.941  6807  6807 E SlowAppComponent: 125ms: FcmListenerService instantiating…
+02-04 19:03:15.941  6807  6807 E SlowAppComponent: Main thread was blocked for 142ms in the background starting with FirebaseInstanceIdReceiver
+02-04 19:03:15.951  6807  7080 E msys    : E[N WA]_WCCConnectionDefaultLifecycleEventHandler(2076)=>[INFO] connection/xmpp/lifecycle_event/did-connect, [11.4599s]
+02-04 19:03:15.986  6807  7080 E msys    : E[N WA]_WCCConnectionDefaultLifecycleEventHandler(2076)=>[INFO] connection/xmpp/lifecycle_event/did-send-initial-payload, [0.0347s]
+02-04 19:03:16.294  6807  7080 E msys    : E[N WA]_WCCConnectionDefaultLifecycleEventHandler(2076)=>[INFO] connection/xmpp/lifecycle_event/will-handshake, [0.3078s]
+02-04 19:03:16.298  6807  7080 E msys    : E[N WA]_WCCConnectionDefaultLifecycleEventHandler(2076)=>[INFO] connection/xmpp/lifecycle_event/did-handshake, [0.0039s]
+02-04 19:03:16.301  6807  7080 E msys    : E[N WA]_WCCConnectionDefaultReceiveHandler(2236)=>[INFO] connection/receive/login-success
+02-04 19:03:16.302  6807  7080 E msys    : E[N WA]_WCCConnectionDefaultEmitStateChange(3059)=>[INFO] connection/new_state/connected [connection_id=72582118, wcc_source=1, wcc_reason=18]
+02-04 19:03:16.381  6807  8830 E Flipper : Attempted to initialize in non-internal build
+02-04 19:03:16.742  6807  6908 E msys    : E[N mns]_OnDiskCacheGetData(632)=>Start post callback cache refresh DNS resolution
+02-04 19:03:16.753  6807  6908 E msys    : E[N mns]_OnSystemDNSSuccessCallback(340)=>Cache refresh succeeded with system DNS resolver. IP count: 2
+02-04 19:03:16.987  6807  6807 E IgFunctionalErrorEvent: WEARABLES_IPC_ERROR
+02-04 19:03:16.987  6807  6807 E IgFunctionalErrorEvent: 	 ipc_step = LOCATE_VIEW_APP_PACKAGES
+02-04 19:03:16.987  6807  6807 E IgFunctionalErrorEvent: 	 reason = android.content.pm.PackageManager$NameNotFoundException: com.facebook.stella
+02-04 19:03:17.042  6807 13646 E StellaIntentHelper: Failed getting package info
+02-04 19:03:17.042  6807 13646 E StellaIntentHelper: android.content.pm.PackageManager$NameNotFoundException: com.facebook.stella
+02-04 19:03:17.042  6807 13646 E StellaIntentHelper: 	at android.app.ApplicationPackageManager.getPackageInfoAsUser(ApplicationPackageManager.java:281)
+02-04 19:03:17.042  6807 13646 E StellaIntentHelper: 	at android.app.ApplicationPackageManager.getPackageInfo(ApplicationPackageManager.java:241)
+02-04 19:03:17.042  6807 13646 E StellaIntentHelper: 	at android.app.ApplicationPackageManager.getPackageInfo(ApplicationPackageManager.java:235)
+02-04 19:03:17.042  6807 13646 E StellaIntentHelper: 	at X.5Gt.A00(Unknown Source:99)
+02-04 19:03:17.042  6807 13646 E StellaIntentHelper: 	at X.2aW.A1Z(:19)
+02-04 19:03:17.042  6807 13646 E StellaIntentHelper: 	at X.4pr.A0C(:131)
+02-04 19:03:17.042  6807 13646 E StellaIntentHelper: 	at X.4mj.A00(:175)
+02-04 19:03:17.042  6807 13646 E StellaIntentHelper: 	at X.HNN.run(Unknown Source:39)
+02-04 19:03:17.042  6807 13646 E StellaIntentHelper: 	at X.5GL.A00(Unknown Source:144)
+02-04 19:03:17.042  6807 13646 E StellaIntentHelper: 	at X.4pr.A0E(:64)
+02-04 19:03:17.042  6807 13646 E StellaIntentHelper: 	at X.4mj.A08(:1368)
+02-04 19:03:17.042  6807 13646 E StellaIntentHelper: 	at X.5HJ.A04(Unknown Source:573)
+02-04 19:03:17.042  6807 13646 E StellaIntentHelper: 	at X.5HJ.A05(Unknown Source:175)
+02-04 19:03:17.042  6807 13646 E StellaIntentHelper: 	at com.instagram.notifications.push.fcm.FcmListenerService.A00(Unknown Source:36)
+02-04 19:03:17.042  6807 13646 E StellaIntentHelper: 	at com.instagram.notifications.push.fcm.FcmListenerService.A06(Unknown Source:196)
+02-04 19:03:17.042  6807 13646 E StellaIntentHelper: 	at com.google.firebase.messaging.FirebaseMessagingService.A03(Unknown Source:1432)
+02-04 19:03:17.042  6807 13646 E StellaIntentHelper: 	at X.6YN.run(Unknown Source:4)
+02-04 19:03:17.042  6807 13646 E StellaIntentHelper: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1154)
+02-04 19:03:17.042  6807 13646 E StellaIntentHelper: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:652)
+02-04 19:03:17.042  6807 13646 E StellaIntentHelper: 	at X.9uc.run(Unknown Source:9)
+02-04 19:03:17.042  6807 13646 E StellaIntentHelper: 	at java.lang.Thread.run(Thread.java:1563)
+02-04 19:03:17.042  6807 13646 E StellaIntentHelper: Failed getting package info
+02-04 19:03:17.645  1451  1572 E WifiHAL : Creating message to get cached scan results
+02-04 19:03:18.738 10450 10488 E bluetooth-asha: system/bta/hearing_aid/hearing_aid.cc:583 OnConnectionUpdateComplete: unknown device: conn_id=0x31
+02-04 19:03:27.261 10450 10488 E bluetooth-asha: system/bta/hearing_aid/hearing_aid.cc:583 OnConnectionUpdateComplete: unknown device: conn_id=0x31
+02-04 19:03:28.343  1455 19880 E APM::AudioInputDescriptor: setDevice failed to set preferred config for device AUDIO_DEVICE_IN_BUILTIN_MIC, @:bottom
+02-04 19:03:28.524  1398  2172 E AHal::AudioMetric::StatsdSuezDataAdapter: WriteThread: StatSd writing thread write_queue_.size = 1
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: Exception thrown when executing UIFrameGuarded
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: java.lang.IllegalStateException: API key not found.  Check that <meta-data android:name="com.google.android.geo.API_KEY" android:value="your API key"/> is in the <application> element of AndroidManifest.xml
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at com.google.maps.api.android.lib6.common.h.b(:com.google.android.gms.policy_maps_core_dynamite@254515607@254515602025.843324832.843324832:117)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at com.google.android.gms.maps.internal.CreatorImpl.c(:com.google.android.gms.policy_maps_core_dynamite@254515607@254515602025.843324832.843324832:864)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at com.google.android.gms.maps.internal.CreatorImpl.newMapViewDelegate(:com.google.android.gms.policy_maps_core_dynamite@254515607@254515602025.843324832.843324832:23)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at com.google.android.gms.maps.internal.h.bt(:com.google.android.gms.policy_maps_core_dynamite@254515607@254515602025.843324832.843324832:311)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at m140.ayi.onTransact(:com.google.android.gms.policy_maps_core_dynamite@254515607@254515602025.843324832.843324832:21)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at android.os.Binder.transact(Binder.java:1325)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at com.google.android.gms.internal.maps.zza.zzJ(com.google.android.gms:play-services-maps@@18.2.0:2)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at com.google.android.gms.maps.internal.zze.zzg(com.google.android.gms:play-services-maps@@18.2.0:4)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at com.google.android.gms.maps.zzai.zzb(com.google.android.gms:play-services-maps@@18.2.0:4)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at com.google.android.gms.maps.zzai.createDelegate(com.google.android.gms:play-services-maps@@18.2.0:1)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at com.google.android.gms.dynamic.DeferredLifecycleHelper.zaf(com.google.android.gms:play-services-base@@18.2.0:6)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at com.google.android.gms.dynamic.DeferredLifecycleHelper.onCreate(com.google.android.gms:play-services-base@@18.2.0:1)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at com.google.android.gms.maps.MapView.onCreate(com.google.android.gms:play-services-maps@@18.2.0:4)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at com.rnmaps.maps.MapView.<init>(MapView.java:180)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at com.rnmaps.maps.MapManager.createViewInstance(MapManager.java:78)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at com.rnmaps.maps.MapManager.createViewInstance(MapManager.java:33)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at com.facebook.react.uimanager.ViewManager.createViewInstance(ViewManager.java:216)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at com.rnmaps.maps.MapManager.createViewInstance(MapManager.java:108)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at com.rnmaps.maps.MapManager.createViewInstance(MapManager.java:33)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at com.facebook.react.uimanager.ViewManager.createView(ViewManager.java:148)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at com.facebook.react.fabric.mounting.SurfaceMountingManager.createViewUnsafe(SurfaceMountingManager.java:673)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at com.facebook.react.fabric.mounting.SurfaceMountingManager.preallocateView(SurfaceMountingManager.java:1083)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at com.facebook.react.fabric.mounting.mountitems.PreAllocateViewMountItem.execute(PreAllocateViewMountItem.kt:38)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at com.facebook.react.fabric.mounting.MountItemDispatcher.executeOrEnqueue(MountItemDispatcher.kt:312)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at com.facebook.react.fabric.mounting.MountItemDispatcher.dispatchPreMountItemsImpl(MountItemDispatcher.kt:290)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at com.facebook.react.fabric.mounting.MountItemDispatcher.dispatchPreMountItems(MountItemDispatcher.kt:269)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at com.facebook.react.fabric.FabricUIManager$DispatchUIFrameCallback.doFrameGuarded(FabricUIManager.java:1483)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at com.facebook.react.uimanager.GuardedFrameCallback.doFrame(GuardedFrameCallback.kt:25)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at com.facebook.react.modules.core.ReactChoreographer.frameCallback$lambda$1(ReactChoreographer.kt:59)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at com.facebook.react.modules.core.ReactChoreographer.$r8$lambda$nSkFhrr5T7rop_XKwzlLov4NLLw(Unknown Source:0)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at com.facebook.react.modules.core.ReactChoreographer$$ExternalSyntheticLambda0.doFrame(D8$$SyntheticClass:0)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at android.view.Choreographer$CallbackRecord.run(Choreographer.java:1628)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at android.view.Choreographer$CallbackRecord.run(Choreographer.java:1639)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at android.view.Choreographer.doCallbacks(Choreographer.java:1235)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at android.view.Choreographer.doFrame(Choreographer.java:1160)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at android.view.Choreographer$FrameDisplayEventReceiver.run(Choreographer.java:1613)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at android.os.Handler.handleCallback(Handler.java:1070)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at android.os.Handler.dispatchMessage(Handler.java:125)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at android.os.Looper.dispatchMessage(Looper.java:333)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at android.os.Looper.loopOnce(Looper.java:263)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at android.os.Looper.loop(Looper.java:367)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at android.app.ActivityThread.main(ActivityThread.java:9287)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at java.lang.reflect.Method.invoke(Native Method)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:566)
+02-04 19:03:29.642 13341 13341 E unknown:FabricUIManager: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:929)
+--------- beginning of crash
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: FATAL EXCEPTION: main
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: Process: com.danishsharma.ForFriendsOnTheGo, PID: 13341
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: java.lang.IllegalStateException: API key not found.  Check that <meta-data android:name="com.google.android.geo.API_KEY" android:value="your API key"/> is in the <application> element of AndroidManifest.xml
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at com.google.maps.api.android.lib6.common.h.b(:com.google.android.gms.policy_maps_core_dynamite@254515607@254515602025.843324832.843324832:117)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at com.google.android.gms.maps.internal.CreatorImpl.c(:com.google.android.gms.policy_maps_core_dynamite@254515607@254515602025.843324832.843324832:864)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at com.google.android.gms.maps.internal.CreatorImpl.newMapViewDelegate(:com.google.android.gms.policy_maps_core_dynamite@254515607@254515602025.843324832.843324832:23)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at com.google.android.gms.maps.internal.h.bt(:com.google.android.gms.policy_maps_core_dynamite@254515607@254515602025.843324832.843324832:311)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at m140.ayi.onTransact(:com.google.android.gms.policy_maps_core_dynamite@254515607@254515602025.843324832.843324832:21)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at android.os.Binder.transact(Binder.java:1325)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at com.google.android.gms.internal.maps.zza.zzJ(com.google.android.gms:play-services-maps@@18.2.0:2)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at com.google.android.gms.maps.internal.zze.zzg(com.google.android.gms:play-services-maps@@18.2.0:4)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at com.google.android.gms.maps.zzai.zzb(com.google.android.gms:play-services-maps@@18.2.0:4)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at com.google.android.gms.maps.zzai.createDelegate(com.google.android.gms:play-services-maps@@18.2.0:1)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at com.google.android.gms.dynamic.DeferredLifecycleHelper.zaf(com.google.android.gms:play-services-base@@18.2.0:6)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at com.google.android.gms.dynamic.DeferredLifecycleHelper.onCreate(com.google.android.gms:play-services-base@@18.2.0:1)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at com.google.android.gms.maps.MapView.onCreate(com.google.android.gms:play-services-maps@@18.2.0:4)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at com.rnmaps.maps.MapView.<init>(MapView.java:180)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at com.rnmaps.maps.MapManager.createViewInstance(MapManager.java:78)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at com.rnmaps.maps.MapManager.createViewInstance(MapManager.java:33)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at com.facebook.react.uimanager.ViewManager.createViewInstance(ViewManager.java:216)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at com.rnmaps.maps.MapManager.createViewInstance(MapManager.java:108)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at com.rnmaps.maps.MapManager.createViewInstance(MapManager.java:33)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at com.facebook.react.uimanager.ViewManager.createView(ViewManager.java:148)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at com.facebook.react.fabric.mounting.SurfaceMountingManager.createViewUnsafe(SurfaceMountingManager.java:673)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at com.facebook.react.fabric.mounting.SurfaceMountingManager.preallocateView(SurfaceMountingManager.java:1083)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at com.facebook.react.fabric.mounting.mountitems.PreAllocateViewMountItem.execute(PreAllocateViewMountItem.kt:38)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at com.facebook.react.fabric.mounting.MountItemDispatcher.executeOrEnqueue(MountItemDispatcher.kt:312)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at com.facebook.react.fabric.mounting.MountItemDispatcher.dispatchPreMountItemsImpl(MountItemDispatcher.kt:290)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at com.facebook.react.fabric.mounting.MountItemDispatcher.dispatchPreMountItems(MountItemDispatcher.kt:269)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at com.facebook.react.fabric.FabricUIManager$DispatchUIFrameCallback.doFrameGuarded(FabricUIManager.java:1483)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at com.facebook.react.uimanager.GuardedFrameCallback.doFrame(GuardedFrameCallback.kt:25)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at com.facebook.react.modules.core.ReactChoreographer.frameCallback$lambda$1(ReactChoreographer.kt:59)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at com.facebook.react.modules.core.ReactChoreographer.$r8$lambda$nSkFhrr5T7rop_XKwzlLov4NLLw(Unknown Source:0)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at com.facebook.react.modules.core.ReactChoreographer$$ExternalSyntheticLambda0.doFrame(D8$$SyntheticClass:0)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at android.view.Choreographer$CallbackRecord.run(Choreographer.java:1628)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at android.view.Choreographer$CallbackRecord.run(Choreographer.java:1639)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at android.view.Choreographer.doCallbacks(Choreographer.java:1235)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at android.view.Choreographer.doFrame(Choreographer.java:1160)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at android.view.Choreographer$FrameDisplayEventReceiver.run(Choreographer.java:1613)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at android.os.Handler.handleCallback(Handler.java:1070)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:125)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at android.os.Looper.dispatchMessage(Looper.java:333)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at android.os.Looper.loopOnce(Looper.java:263)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:367)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:9287)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:566)
+02-04 19:03:29.643 13341 13341 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:929)
+02-04 19:03:29.657  1856  2492 E InputDispatcher: channel 'e7bde6 com.danishsharma.ForFriendsOnTheGo/com.danishsharma.ForFriendsOnTheGo.MainActivity' ~ Channel is unrecoverably broken and will be disposed!
+02-04 19:03:30.127  1856  4543 E libbinder.IPCThreadState: Binder transaction failure. id: 590280462, cmd: BR_DEAD_REPLY (29189), error: -22 (Invalid argument)
+02-04 19:03:30.146   640   640 E BpTransactionCompletedListener: Failed to transact (-32)
+02-04 19:03:35.792  6807  8675 E msys    : E[N mccw.liger]onReadError(732)=>read/error - ex: AsyncSocketException: recv() failed (peer=[2a03:2880:f311:24:face:b00c:0:6e2e]:80), type = Internal error, errno = 103 (Software caused connection abort), errno: 103
+02-04 19:03:35.795  6807  7080 E msys    : E[N WA]_WCCXMPPStreamDisconnectHandler(335)=>xmpp/disconnect - WCIStreamStateErrorCode: 2, domain: WCIStreamState, subdomain: MCCWLigerStream: Error Domain=WCIStreamState Code=2 UserInfo=0xb4000073e5721370 {MCFErrorDirectUnderlyingErrorKey=0xb40000724572ca50 "Error Domain=MCCWLigerStream Code=2 UserInfo=0xb4000073e5743420 {MCFErrorDirectLocalizedFailureReasonKey=AsyncSocketException: recv() failed (peer=[2a03:2880:f311:24:face:b00c:0:6e2e]:80), type = Internal error, errno = 103 (Software caused connection abort)}"}
+02-04 19:03:35.795  6807  7080 E msys    : E[N WA]_WCCConnectionDefaultLifecycleEventHandler(2076)=>[INFO] connection/xmpp/lifecycle_event/not-connected, [19.4969s]
+02-04 19:03:35.795  6807  7080 E msys    : E[N WA]_WCCXMPPStreamDoDisconnect(1223)=>xmpp/disconnect - flags: 256
+02-04 19:03:35.795  6807  7080 E msys    : E[N WA]_WCCConnectionDefaultDisconnectHandler(2182)=>connection/disconnected, peer reset
+02-04 19:03:35.796  6807  7080 E msys    : E[N WA]_WCCConnectionDefaultEmitStateChange(3059)=>[INFO] connection/new_state/not-connected [connection_id=72582118, wcc_source=1, wcc_reason=18]
+02-04 19:03:35.797  6807  7080 E msys    : E[C 1]MCCLogErrorWithTraceOrQPL(281)=>8/374/3970/65536
+02-04 19:03:35.798  6807  7080 E msys    : E[C 1]MCCLogErrorWithTraceOrQPL(281)=>8/374/3972/18
+02-04 19:03:35.798  6807  7080 E msys    : E[C mem.context]_LogConnectFailure(4893)=>Establishing connection failure reason and flags: disconnect/Doze/-1/reason/18/flags/65536/[-, -, -, -, -, -, -, -, -, peer_reset, -, -, -, -]
+02-04 19:03:35.798  6807  7080 E msys    : E[C mem.context]_LogConnectFailure(4925)=>[Happy Eyeball] Connect failed with source=1, winner stream ip=2a03:2880:f311:24:face:b00c:0:6e2e, port=80, dnsResolutionMethod=1, combined_ip_addresses=2a03:2880:f311:24:face:b00c:0:6e2e, 57.144.40.36
+02-04 19:03:35.800  6807  7080 E msys    : E[N WA]_WCCConnectionDefaultDisconnectHandler(2207)=>[INFO] connection/disconnected/[did-connect, did-read-bytes]
+02-04 19:03:35.802  6807  7080 E msys    : E[N WA]_WCCConnectionDefaultEmitStateChange(3059)=>[INFO] connection/new_state/connecting [connection_id=72582119, wcc_source=1, wcc_reason=18]
+02-04 19:03:35.830  6807  7080 E msys    : E[N WA]_WCCConnectionDefaultDoConnectWithAuthKeys(1494)=>[INFO] connection/connect/start/[host=z-p42-chat-e2ee-ig.facebook.com port=5222]/[57.144.40.36:5222]
+02-04 19:03:35.832  6807  7080 E msys    : E[N WA]_WCCConnectionDefaultLifecycleEventHandler(2068)=>[INFO] connection/xmpp/lifecycle_event/will-connect
+02-04 19:03:35.832  6807  7080 E msys    : E[A WA]WCCHandshakeCreate(178)=>handshake/create, pq mode:0
+02-04 19:03:41.367  6807  7090 E msys    : E[S MSync]_ModularSyncHandleNetworkResponse(1691)=>DB[223] - Encountered a network error (2002: TransientError domain: MNSQUICConnection code: 0 detail: Error on socket write Operation not permitted, )
+02-04 19:03:41.368  6807  7090 E msys    : E[S MSync]_ModularSyncHandleNetworkErrorResponse(1406)=>DB[223] - handle network error response
+02-04 19:03:41.376  6807  6966 E msys    : E[N mns]_OnDiskCacheGetData(632)=>Start post callback cache refresh DNS resolution
+02-04 19:03:41.389  6807  6966 E msys    : E[N mns]_LogError(228)=>Failed to resolve using system DNS resolver, getaddrinfo(): No address associated with hostname
+02-04 19:03:41.389  6807  6966 E msys    : E[N mns]_OnDiskCacheGetData(632)=>Start post callback cache refresh DNS resolution
+02-04 19:03:41.392  6807  6966 E msys    : E[N mns]_LogError(228)=>Failed to resolve using system DNS resolver, getaddrinfo(): No address associated with hostname
+02-04 19:03:47.975 13721 13750 E ashmem  : Pinning is deprecated since Android Q. Please use trim or other methods.
