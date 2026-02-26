@@ -22,9 +22,12 @@ export interface Session {
     recommendations?: Recommendation[];
 }
 
+import { type NiceAvatarConfig } from "../constants/avatars";
+
 export interface Participant {
     uid: string;
     displayName: string;
+    avatarConfig?: NiceAvatarConfig | null;
     isReady: boolean;
     location?: {
         lat: number;

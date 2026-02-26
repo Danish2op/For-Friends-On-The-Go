@@ -1,4 +1,3 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getApp, getApps, initializeApp } from "firebase/app";
 import * as FirebaseAuth from "firebase/auth";
 import {
@@ -18,6 +17,36 @@ type AsyncStorageLike = {
     getItem: (key: string) => Promise<string | null>;
     setItem: (key: string, value: string) => Promise<unknown>;
     removeItem: (key: string) => Promise<unknown>;
+};
+
+// ── Defensive AsyncStorage import ────────────────────────────────────────────
+// On iOS hot reloads the NativeModule can be null before the bridge
+// finishes initialising. We import lazily and fall back to a transient
+// in-memory store so `config.ts` module evaluation never hard-crashes and
+// cascades into "missing default export" for every route.
+
+const _memoryFallback: Record<string, string> = {};
+const memoryStorage: AsyncStorageLike = {
+    getItem: async (key) => _memoryFallback[key] ?? null,
+    setItem: async (key, value) => { _memoryFallback[key] = value; },
+    removeItem: async (key) => { delete _memoryFallback[key]; },
+};
+
+let _asyncStorage: AsyncStorageLike | null = null;
+const getAsyncStorage = (): AsyncStorageLike => {
+    if (_asyncStorage) return _asyncStorage;
+    try {
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        const mod = require("@react-native-async-storage/async-storage");
+        const resolved = mod?.default ?? mod;
+        if (resolved && typeof resolved.getItem === "function") {
+            _asyncStorage = resolved as AsyncStorageLike;
+            return _asyncStorage;
+        }
+    } catch (e) {
+        console.warn("[config] AsyncStorage native module unavailable — using memory fallback:", e);
+    }
+    return memoryStorage;
 };
 
 const envFirebaseApiKey = process.env.EXPO_PUBLIC_FIREBASE_API_KEY?.trim();
@@ -117,10 +146,11 @@ const initializeFirebaseAuth = (): Auth => {
     }
 
     try {
+        const storage = getAsyncStorage();
         const persistence =
             typeof authModule.getReactNativePersistence === "function"
-                ? authModule.getReactNativePersistence(AsyncStorage)
-                : createFallbackReactNativePersistence(AsyncStorage);
+                ? authModule.getReactNativePersistence(storage)
+                : createFallbackReactNativePersistence(storage);
 
         return authModule.initializeAuth(app, { persistence });
     } catch {

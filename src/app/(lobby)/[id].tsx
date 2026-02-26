@@ -16,6 +16,7 @@ import {
 } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { ErrorBoundary } from "../../components/ErrorBoundary";
+import { UserAvatar } from "../../components/avatar/avatar-ui";
 import ExitConfirmationCard from "../../components/lobby/ExitConfirmationCard";
 import OlaMap from "../../components/map/OlaMap";
 import { COLORS, SKEUO } from "../../constants/theme";
@@ -170,16 +171,22 @@ export default function LobbyScreen() {
                 return;
             }
 
-            const places = await fetchMeetingPoints(center.lat, center.lng);
-            if (places.length === 0) {
+            const result = await fetchMeetingPoints(center.lat, center.lng);
+            if (result.places.length === 0) {
                 toast.show("No meeting spots found. Try again in a moment.", "error");
                 return;
             }
 
+            console.log(
+                `📍 Found ${result.places.length} spots ` +
+                `(${result.cafeCount} cafes, ${result.restaurantCount} restaurants) ` +
+                `in ${result.iterations} pass(es)`
+            );
+
             await startLobbyVoting({
                 sessionId: id,
                 center,
-                places,
+                places: result.places,
             });
         } catch (error) {
             if (error instanceof Error) {
@@ -290,7 +297,7 @@ export default function LobbyScreen() {
                         renderItem={({ item }) => (
                             <View style={styles.participantCard}>
                                 <View style={[styles.participantAvatar, item.location ? styles.participantLive : styles.participantIdle]}>
-                                    <Text style={styles.participantLetter}>{item.displayName.slice(0, 1).toUpperCase()}</Text>
+                                    <UserAvatar config={item.avatarConfig} size={48} />
                                 </View>
                                 <Text style={styles.participantName} numberOfLines={1}>
                                     {item.displayName}

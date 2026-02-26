@@ -60,6 +60,25 @@ service cloud.firestore {
       return avatarId is string && avatarId in ['1', '2', '3', '4', '5'];
     }
 
+    function isValidAvatarConfig(config) {
+      return config == null || (
+        config is map
+        && config.keys().hasOnly(['sex', 'faceColor', 'earSize', 'hairColor', 'hairStyle', 'eyeStyle', 'noseStyle', 'mouthStyle', 'glassesStyle', 'shirtStyle', 'shirtColor', 'bgColor'])
+        && config.sex is string
+        && config.faceColor is string
+        && config.earSize is string
+        && config.hairColor is string
+        && config.hairStyle is string
+        && config.eyeStyle is string
+        && config.noseStyle is string
+        && config.mouthStyle is string
+        && config.glassesStyle is string
+        && config.shirtStyle is string
+        && config.shirtColor is string
+        && config.bgColor is string
+      );
+    }
+
     function isValidExpoPushToken(token) {
       return token is string
         && token.size() >= 20
@@ -81,6 +100,7 @@ service cloud.firestore {
           'username',
           'usernameLower',
           'avatarId',
+          'avatarConfig',
           'friends',
           'lastSeen',
           'createdAt',
@@ -93,6 +113,7 @@ service cloud.firestore {
         && isValidUsername(payload.username)
         && isValidUsernameKey(payload.usernameLower)
         && isValidAvatar(payload.avatarId)
+        && (!payload.keys().hasAny(['avatarConfig']) || isValidAvatarConfig(payload.avatarConfig))
         && payload.friends is list
         && payload.lastSeen is timestamp
         && payload.createdAt is timestamp
@@ -132,9 +153,11 @@ service cloud.firestore {
           'requesterUid',
           'requesterUsername',
           'requesterAvatarId',
+          'requesterAvatarConfig',
           'targetUid',
           'targetUsername',
           'targetAvatarId',
+          'targetAvatarConfig',
           'status',
           'createdAt',
           'updatedAt',
@@ -144,8 +167,10 @@ service cloud.firestore {
         && payload.targetUid == targetUid
         && isValidUsername(payload.requesterUsername)
         && isValidAvatar(payload.requesterAvatarId)
+        && (!payload.keys().hasAny(['requesterAvatarConfig']) || isValidAvatarConfig(payload.requesterAvatarConfig))
         && isValidUsername(payload.targetUsername)
-        && isValidAvatar(payload.targetAvatarId);
+        && isValidAvatar(payload.targetAvatarId)
+        && (!payload.keys().hasAny(['targetAvatarConfig']) || isValidAvatarConfig(payload.targetAvatarConfig));
     }
 
     function isPendingFriendRequestCreate(payload, requesterUid, targetUid) {
@@ -161,9 +186,11 @@ service cloud.firestore {
           'requesterUid',
           'requesterUsername',
           'requesterAvatarId',
+          'requesterAvatarConfig',
           'targetUid',
           'targetUsername',
           'targetAvatarId',
+          'targetAvatarConfig',
           'status',
           'createdAt',
           'updatedAt',
@@ -172,9 +199,11 @@ service cloud.firestore {
         && next.requesterUid == prev.requesterUid
         && next.requesterUsername == prev.requesterUsername
         && next.requesterAvatarId == prev.requesterAvatarId
+        && (!next.keys().hasAny(['requesterAvatarConfig']) || next.requesterAvatarConfig == prev.requesterAvatarConfig)
         && next.targetUid == prev.targetUid
         && next.targetUsername == prev.targetUsername
         && next.targetAvatarId == prev.targetAvatarId
+        && (!next.keys().hasAny(['targetAvatarConfig']) || next.targetAvatarConfig == prev.targetAvatarConfig)
         && next.createdAt == prev.createdAt
         && prev.status == 'pending'
         && next.status == nextStatus
@@ -234,6 +263,7 @@ service cloud.firestore {
                 'emailNormalized',
                 'usernameLower',
                 'avatarId',
+                'avatarConfig',
                 'friends',
                 'lastSeen',
                 'createdAt',
@@ -380,6 +410,7 @@ service cloud.firestore {
             'usernameLower',
             'emailNormalized',
             'avatarId',
+            'avatarConfig',
             'createdAt',
             'updatedAt'
           ])
@@ -388,6 +419,7 @@ service cloud.firestore {
         && isValidUsername(request.resource.data.username)
         && isValidEmail(request.resource.data.emailNormalized)
         && isValidAvatar(request.resource.data.avatarId)
+        && (!request.resource.data.keys().hasAny(['avatarConfig']) || isValidAvatarConfig(request.resource.data.avatarConfig))
         && request.resource.data.createdAt is timestamp
         && request.resource.data.updatedAt is timestamp
         && !exists(usernamePath(username))
@@ -405,6 +437,7 @@ service cloud.firestore {
             'usernameLower',
             'emailNormalized',
             'avatarId',
+            'avatarConfig',
             'createdAt',
             'updatedAt'
           ])
@@ -414,6 +447,7 @@ service cloud.firestore {
         && request.resource.data.usernameLower == username
         && isValidEmail(request.resource.data.emailNormalized)
         && isValidAvatar(request.resource.data.avatarId)
+        && (!request.resource.data.keys().hasAny(['avatarConfig']) || isValidAvatarConfig(request.resource.data.avatarConfig))
         && request.resource.data.createdAt == resource.data.createdAt
         && request.resource.data.updatedAt is timestamp
         && getAfter(userPath(request.auth.uid)).data.username == request.resource.data.username
@@ -476,11 +510,12 @@ service cloud.firestore {
       }
 
       function hasParticipantCreateShape(payload, participantId) {
-        return payload.keys().hasOnly(['uid', 'displayName', 'isReady', 'joinedAt', 'updatedAt', 'location'])
+        return payload.keys().hasOnly(['uid', 'displayName', 'isReady', 'joinedAt', 'updatedAt', 'location', 'avatarConfig'])
           && payload.uid == participantId
           && payload.displayName is string
           && payload.displayName.size() >= 1
           && payload.displayName.size() <= 64
+          && (!payload.keys().hasAny(['avatarConfig']) || isValidAvatarConfig(payload.avatarConfig))
           && payload.isReady is bool
           && payload.joinedAt is timestamp
           && payload.updatedAt is timestamp
@@ -491,11 +526,12 @@ service cloud.firestore {
       }
 
       function hasParticipantUpdateShape(next, prev, participantId) {
-        return next.keys().hasOnly(['uid', 'displayName', 'isReady', 'joinedAt', 'updatedAt', 'location'])
+        return next.keys().hasOnly(['uid', 'displayName', 'isReady', 'joinedAt', 'updatedAt', 'location', 'avatarConfig'])
           && next.uid == participantId
           && next.uid == prev.uid
           && next.displayName == prev.displayName
           && next.joinedAt == prev.joinedAt
+          && (!next.keys().hasAny(['avatarConfig']) || isValidAvatarConfig(next.avatarConfig))
           && next.isReady is bool
           && next.updatedAt is timestamp
           && (

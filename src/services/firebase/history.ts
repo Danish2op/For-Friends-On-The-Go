@@ -68,7 +68,8 @@ export const updateLobbyHistoryStatus = async (
 export const subscribeLobbyHistory = (
     uid: string,
     onUpdate: (items: LobbyHistoryItem[]) => void,
-    maxItems: number = 25
+    maxItems: number = 25,
+    onError?: (error: Error) => void
 ) => {
     const historyQuery = query(
         collection(db, "users", uid, "history"),
@@ -76,8 +77,17 @@ export const subscribeLobbyHistory = (
         limit(maxItems)
     );
 
-    return onSnapshot(historyQuery, (snapshot) => {
-        const items = snapshot.docs.map((item) => item.data() as LobbyHistoryItem);
-        onUpdate(items);
-    });
+    return onSnapshot(
+        historyQuery,
+        (snapshot) => {
+            const items = snapshot.docs.map((item) => item.data() as LobbyHistoryItem);
+            onUpdate(items);
+        },
+        (error) => {
+            console.error("[subscribeLobbyHistory] Firestore listener error:", error);
+            // Unblock the UI — deliver an empty list so the spinner stops.
+            onUpdate([]);
+            onError?.(error);
+        }
+    );
 };

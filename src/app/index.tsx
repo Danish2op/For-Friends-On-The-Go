@@ -262,6 +262,7 @@ export default function HomeScreen() {
                 hostUid: userId,
                 hostName: actorName,
                 inviteeUids: selectedInviteUids,
+                hostAvatarConfig: avatarConfig,
             });
             console.log("[LobbyCreate] invitedRecipientUids:", createdLobby.invitedRecipientUids);
             await recordLobbyHistory({
@@ -329,6 +330,7 @@ export default function HomeScreen() {
                 lobbyCode: normalizedCode,
                 userUid: userId,
                 userDisplayName: actorName,
+                userAvatarConfig: avatarConfig,
             });
             await recordLobbyHistory({
                 uid: userId,
@@ -499,7 +501,7 @@ export default function HomeScreen() {
         await Haptics.selectionAsync();
         setProcessingLobbyInviteId(inviteId);
         try {
-            const accepted = await acceptLobbyInvite(userId, inviteId, actorName);
+            const accepted = await acceptLobbyInvite(userId, inviteId, actorName, avatarConfig);
             await recordLobbyHistory({
                 uid: userId,
                 sessionId: accepted.lobbyId,

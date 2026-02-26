@@ -1,4 +1,10 @@
 import { getRequiredRuntimeEnv } from "../../config/env";
+import type {
+    CategorizedPlace,
+    FetchMeetingPointsResult,
+    NearbyPlace,
+    PlaceCategory,
+} from "../../types/places";
 
 export const calculateCentroid = (participants: any[]) => {
     const validParticipants = participants.filter(
@@ -80,33 +86,120 @@ const dedupePlaces = (places: any[]) => {
     return [...byKey.values()];
 };
 
-export const fetchMeetingPoints = async (lat: number, lng: number) => {
-    try {
-        const apiKey = getOlaApiKey();
-        // STRICTER QUERY: Only food & drink
-        const url = `https://api.olamaps.io/places/v1/nearbysearch?layers=venue&types=restaurant,cafe,bar&location=${lat},${lng}&radius=2000&api_key=${apiKey}`;
+// ── Category Classification ─────────────────────────────────────────────────
 
-        console.log("🔍 Requesting URL:", url);
-        const response = await fetch(url);
-        const data = await response.json();
+const CAFE_KEYWORDS = ["cafe", "café", "coffee", "bakery", "tea", "chai", "starbucks", "barista"];
+const RESTAURANT_KEYWORDS = ["restaurant", "biryani", "pizza", "burger", "dhaba", "diner", "grill", "kitchen", "eatery", "food", "dosa", "thali", "meals"];
+const JUNK_KEYWORDS = ["mechanic", "repair", "auto", "tyre", "tire", "honda", "tvs", "service center", "grocery", "store", "kirana", "medical", "atm", "sabzi", "mandi", "vegetable", "market"];
 
-        const rawPlaces = data.predictions || data.places || [];
+const classifyPlace = (place: NearbyPlace): PlaceCategory => {
+    const name = `${place.description || place.name || ""}`.toLowerCase();
+    const types = (place.types || []).map((t) => t.toLowerCase());
+    const combined = `${name} ${types.join(" ")}`;
 
-        // THE BOUNCER: Filter out junk keywords
-        const cleanPlaces = rawPlaces.filter((place: any) => {
-            const name = (place.description || place.name || "").toLowerCase();
-            const junkWords = ["mechanic", "repair", "auto", "tyre", "tire", "honda", "tvs", "service center", "grocery", "store", "kirana", "medical", "atm", "sabzi", "mandi", "vegetable", "market"];
-            return !junkWords.some(word => name.includes(word));
-        });
+    if (CAFE_KEYWORDS.some((kw) => combined.includes(kw))) return "cafe";
+    if (RESTAURANT_KEYWORDS.some((kw) => combined.includes(kw))) return "restaurant";
+    return "other";
+};
 
-        const dedupedPlaces = dedupePlaces(cleanPlaces);
-        console.log(`🧹 Filtered ${rawPlaces.length} places down to ${cleanPlaces.length} clean spots.`);
-        console.log(`🧩 Removed duplicates. Final suggestion count: ${dedupedPlaces.length}.`);
-        return dedupedPlaces;
-    } catch (error) {
-        console.error("❌ Error fetching meeting points:", error);
-        return [];
+const isJunk = (place: NearbyPlace): boolean => {
+    const name = `${place.description || place.name || ""}`.toLowerCase();
+    return JUNK_KEYWORDS.some((word) => name.includes(word));
+};
+
+// ── Dynamic Radius Expansion ────────────────────────────────────────────────
+
+const QUOTA_CAFES = 5;
+const QUOTA_RESTAURANTS = 3;
+const INITIAL_RADIUS_M = 1500;
+const RADIUS_MULTIPLIER = 1.5;
+const MAX_RADIUS_M = 30_000;
+const MAX_ITERATIONS = 4;
+
+/**
+ * Fetches meeting points around a coordinate, dynamically expanding the
+ * search radius until category quotas are satisfied or safety caps are hit.
+ *
+ * Guarantees a minimum of 5 cafes and 3 restaurants when the area supports it.
+ */
+export const fetchMeetingPoints = async (
+    lat: number,
+    lng: number
+): Promise<FetchMeetingPointsResult> => {
+    const apiKey = getOlaApiKey();
+    const collected = new Map<string, CategorizedPlace>();
+    let cafeCount = 0;
+    let restaurantCount = 0;
+    let radius = INITIAL_RADIUS_M;
+    let iteration = 0;
+
+    while (iteration < MAX_ITERATIONS && radius <= MAX_RADIUS_M) {
+        iteration++;
+        const quotaMet = cafeCount >= QUOTA_CAFES && restaurantCount >= QUOTA_RESTAURANTS;
+        if (quotaMet) break;
+
+        console.log(
+            `🔍 [Iteration ${iteration}] Searching radius=${radius}m ` +
+            `(cafes=${cafeCount}/${QUOTA_CAFES}, restaurants=${restaurantCount}/${QUOTA_RESTAURANTS})`
+        );
+
+        try {
+            const url =
+                `https://api.olamaps.io/places/v1/nearbysearch` +
+                `?layers=venue&types=restaurant,cafe,bar` +
+                `&location=${lat},${lng}` +
+                `&radius=${radius}` +
+                `&api_key=${apiKey}`;
+
+            const response = await fetch(url);
+
+            if (!response.ok) {
+                console.warn(`⚠️ API returned ${response.status} at radius=${radius}m — stopping expansion.`);
+                break;
+            }
+
+            const data = await response.json();
+            const rawPlaces: NearbyPlace[] = data.predictions || data.places || [];
+
+            // Filter junk, dedupe against already-collected places, classify.
+            for (const place of rawPlaces) {
+                if (!place || typeof place !== "object") continue;
+                if (isJunk(place)) continue;
+
+                const identityKey = buildPlaceIdentityKey(place, collected.size);
+                if (collected.has(identityKey)) continue;
+
+                const category = classifyPlace(place);
+                const categorized: CategorizedPlace = { ...place, _category: category };
+                collected.set(identityKey, categorized);
+
+                if (category === "cafe") cafeCount++;
+                if (category === "restaurant") restaurantCount++;
+            }
+        } catch (error) {
+            console.error(`❌ [Iteration ${iteration}] API error at radius=${radius}m:`, error);
+            // Don't break — allow the loop to try the next radius.
+        }
+
+        // Expand radius for next iteration.
+        radius = Math.round(radius * RADIUS_MULTIPLIER);
     }
+
+    const places = [...collected.values()];
+
+    console.log(
+        `✅ fetchMeetingPoints complete: ${places.length} places ` +
+        `(${cafeCount} cafes, ${restaurantCount} restaurants) ` +
+        `in ${iteration} iteration(s), final radius=${radius}m`
+    );
+
+    return {
+        places,
+        cafeCount,
+        restaurantCount,
+        radiusUsed: radius,
+        iterations: iteration,
+    };
 };
 
 // --- ROUTING LOGIC ---

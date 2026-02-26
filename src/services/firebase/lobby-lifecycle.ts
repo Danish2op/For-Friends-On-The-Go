@@ -46,6 +46,7 @@ export interface CreateLobbyInput {
     hostUid: string;
     hostName: string;
     inviteeUids: string[];
+    hostAvatarConfig?: any | null; // NiceAvatarConfig
 }
 
 export interface CreateLobbyResult {
@@ -58,6 +59,7 @@ export interface JoinLobbyInput {
     lobbyCode: string;
     userUid: string;
     userDisplayName: string;
+    userAvatarConfig?: any | null;
 }
 
 export interface JoinLobbyResult {
@@ -223,6 +225,7 @@ export const createLobbySession = async (input: CreateLobbyInput): Promise<Creat
                     isReady: false,
                     joinedAt: now,
                     updatedAt: now,
+                    avatarConfig: input.hostAvatarConfig ?? null,
                 });
 
                 uniqueInvitees.forEach((recipientUid) => {
@@ -312,6 +315,7 @@ export const joinLobbyByCode = async (input: JoinLobbyInput): Promise<JoinLobbyR
                 isReady: false,
                 joinedAt: now,
                 updatedAt: now,
+                avatarConfig: input.userAvatarConfig ?? null,
             });
             transaction.update(sessionRef, {
                 updatedAt: now,
@@ -329,7 +333,8 @@ export const joinLobbyByCode = async (input: JoinLobbyInput): Promise<JoinLobbyR
 export const acceptLobbyInvite = async (
     recipientUid: string,
     inviteId: string,
-    recipientDisplayName: string
+    recipientDisplayName: string,
+    recipientAvatarConfig?: any | null
 ): Promise<JoinLobbyResult> => {
     const normalizedDisplayName = normalizeDisplayName(recipientDisplayName);
     const inviteRef = doc(db, USER_COLLECTION, recipientUid, "lobbyInvites", inviteId);
@@ -382,6 +387,7 @@ export const acceptLobbyInvite = async (
                 isReady: false,
                 joinedAt: now,
                 updatedAt: now,
+                avatarConfig: recipientAvatarConfig ?? null,
             });
         }
         transaction.update(inviteRef, {

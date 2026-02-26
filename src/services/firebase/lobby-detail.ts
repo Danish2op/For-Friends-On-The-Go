@@ -9,11 +9,14 @@ import {
 } from "firebase/firestore";
 import { db } from "./config";
 
+import { type NiceAvatarConfig } from "../../constants/avatars";
+
 export interface LobbyDetailParticipant {
     uid: string;
     displayName: string;
     joinedAt: Timestamp | null;
     isReady: boolean;
+    avatarConfig?: NiceAvatarConfig | null;
 }
 
 export interface LobbyDetailRecommendation {
@@ -53,12 +56,21 @@ export const fetchLobbyDetail = async (sessionId: string): Promise<LobbyDetail |
 
     const data = sessionSnap.data() as Record<string, unknown>;
 
-    // Fetch participants
-    const participantsQuery = query(
-        collection(db, "sessions", sessionId, "participants"),
-        orderBy("joinedAt", "asc")
-    );
-    const participantsSnap = await getDocs(participantsQuery);
+    // Fetch participants — with fallback for missing Firestore index.
+    // orderBy("joinedAt") requires a composite index that may not exist,
+    // causing a silent failure on iOS. If the ordered query throws, fall
+    // back to an unordered fetch so the screen still loads.
+    let participantsSnap;
+    try {
+        const participantsQuery = query(
+            collection(db, "sessions", sessionId, "participants"),
+            orderBy("joinedAt", "asc")
+        );
+        participantsSnap = await getDocs(participantsQuery);
+    } catch (indexError) {
+        console.warn("[fetchLobbyDetail] orderBy query failed — falling back to unordered fetch:", indexError);
+        participantsSnap = await getDocs(collection(db, "sessions", sessionId, "participants"));
+    }
     const participants: LobbyDetailParticipant[] = participantsSnap.docs.map((d) => {
         const p = d.data() as Record<string, unknown>;
         return {
@@ -66,6 +78,7 @@ export const fetchLobbyDetail = async (sessionId: string): Promise<LobbyDetail |
             displayName: (p.displayName as string) ?? "Unknown",
             joinedAt: (p.joinedAt as Timestamp) ?? null,
             isReady: (p.isReady as boolean) ?? false,
+            avatarConfig: (p.avatarConfig as NiceAvatarConfig) ?? null,
         };
     });
 

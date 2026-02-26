@@ -117,7 +117,7 @@ function AuthGate() {
       <Stack.Screen name="(lobby)/voting" />
       <Stack.Screen name="(lobby)/winner" />
       <Stack.Screen name="history" />
-      <Stack.Screen name="history-detail" options={{ presentation: "formSheet", sheetGrabberVisible: true, sheetAllowedDetents: [0.65, 1.0] } as any} />
+      <Stack.Screen name="history-detail" options={{ presentation: "modal", headerShown: true }} />
       <Stack.Screen name="modal" options={{ presentation: "modal" }} />
     </Stack>
   );

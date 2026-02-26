@@ -98,10 +98,7 @@ export default function HistoryDetailScreen() {
                 options={{
                     title: detail ? `Lobby ${detail.code}` : "Lobby Detail",
                     headerShown: true,
-                    presentation: "formSheet",
-                    sheetGrabberVisible: true,
-                    sheetAllowedDetents: [0.65, 1.0],
-                } as any}
+                }}
             />
 
             {loading ? (

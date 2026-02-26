@@ -77,21 +77,52 @@ export default function HistoryScreen() {
     const { userId } = useAppAuth();
     const [history, setHistory] = useState<LobbyHistoryItem[]>([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
 
     useEffect(() => {
         if (!userId) {
             setHistory([]);
             setLoading(false);
+            setError(false);
             return;
         }
 
         setLoading(true);
-        const unsubscribe = subscribeLobbyHistory(userId, (items) => {
-            setHistory(items);
-            setLoading(false);
-        }, 50);
+        setError(false);
 
-        return unsubscribe;
+        // Safety timeout: if the Firestore listener never fires (iOS silent
+        // failure), force-unblock the UI after 12 seconds.
+        const safetyTimer = setTimeout(() => {
+            setLoading((prev: boolean) => {
+                if (prev) {
+                    console.warn("[HistoryScreen] Safety timeout — Firestore listener never fired.");
+                    setError(true);
+                }
+                return false;
+            });
+        }, 12_000);
+
+        const unsubscribe = subscribeLobbyHistory(
+            userId,
+            (items) => {
+                clearTimeout(safetyTimer);
+                setHistory(items);
+                setLoading(false);
+                setError(false);
+            },
+            50,
+            (err) => {
+                clearTimeout(safetyTimer);
+                console.error("[HistoryScreen] Firestore error:", err);
+                setError(true);
+                setLoading(false);
+            }
+        );
+
+        return () => {
+            clearTimeout(safetyTimer);
+            unsubscribe();
+        };
     }, [userId]);
 
     // Synchronous ref-based lock to prevent overlapping detail modals.
@@ -151,6 +182,23 @@ export default function HistoryScreen() {
                 <View style={styles.centerContent}>
                     <ActivityIndicator size="large" color={COLORS.primary} />
                     <Text style={styles.loadingText}>Loading history...</Text>
+                </View>
+            ) : error ? (
+                <View style={styles.centerContent}>
+                    <Ionicons name="cloud-offline-outline" size={48} color={COLORS.danger} />
+                    <Text style={styles.emptyTitle}>Could not load history</Text>
+                    <Text style={styles.emptySubtitle}>
+                        Check your connection and try again.
+                    </Text>
+                    <TouchableOpacity
+                        style={styles.retryButton}
+                        onPress={() => {
+                            setError(false);
+                            setLoading(true);
+                        }}
+                    >
+                        <Text style={styles.retryText}>Retry</Text>
+                    </TouchableOpacity>
                 </View>
             ) : (
                 <FlatList
@@ -277,5 +325,17 @@ const styles = StyleSheet.create({
         color: COLORS.textDim,
         fontSize: 14,
         textAlign: "center",
+    },
+    retryButton: {
+        marginTop: 8,
+        borderRadius: SKEUO.radius.pill,
+        backgroundColor: COLORS.primary,
+        paddingHorizontal: 24,
+        paddingVertical: 12,
+    },
+    retryText: {
+        color: COLORS.primaryText,
+        fontWeight: "700",
+        fontSize: 14,
     },
 });
