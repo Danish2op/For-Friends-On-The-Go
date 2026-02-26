@@ -1,144 +1,96 @@
-import { Image } from "expo-image";
+/**
+ * Avatar UI Components
+ *
+ * Re-exports UserAvatar and provides the AvatarRandomizer
+ * for signup / profile editing flows.
+ */
+
+import { RefreshCw } from "lucide-react-native";
 import React from "react";
+import { StyleSheet, Text, TouchableOpacity, View, type StyleProp, type ViewStyle } from "react-native";
 import {
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-    type ImageStyle,
-    type StyleProp,
-    type ViewStyle,
-} from "react-native";
-import { AVATAR_OPTIONS, getAvatarOptionById, type AvatarId } from "../../constants/avatars";
+    genRandomAvatarConfig,
+    type NiceAvatarConfig,
+} from "../../constants/avatars";
 import { COLORS, SKEUO } from "../../constants/theme";
+import UserAvatar from "./UserAvatar";
 
-interface AvatarImageProps {
-    avatarId: AvatarId | string | null | undefined;
-    size?: number;
-    style?: StyleProp<ImageStyle>;
-    accessibilityLabel?: string;
-}
+// Re-export for convenience
+export { UserAvatar } from "./UserAvatar";
 
-interface AvatarSelectorProps {
-    value: AvatarId;
-    onChange: (avatarId: AvatarId) => void;
+// ─── AvatarRandomizer ────────────────────────────────────────────────────────
+
+interface AvatarRandomizerProps {
+    value: NiceAvatarConfig;
+    onChange: (config: NiceAvatarConfig) => void;
     disabled?: boolean;
-    layout?: "row" | "grid";
     style?: StyleProp<ViewStyle>;
 }
 
-export function AvatarImage({
-    avatarId,
-    size = 48,
-    style,
-    accessibilityLabel = "Profile avatar",
-}: AvatarImageProps) {
-    const avatar = getAvatarOptionById(avatarId);
-
-    return (
-        <Image
-            source={avatar.source}
-            contentFit="cover"
-            accessibilityLabel={accessibilityLabel}
-            style={[
-                {
-                    width: size,
-                    height: size,
-                    borderRadius: Math.round(size * 0.34),
-                },
-                style,
-            ]}
-        />
-    );
-}
-
-export function AvatarSelector({
+/**
+ * Shows the current avatar with a "Randomize" button.
+ * Replaces the old 5-option AvatarSelector.
+ */
+export function AvatarRandomizer({
     value,
     onChange,
     disabled = false,
-    layout = "grid",
     style,
-}: AvatarSelectorProps) {
+}: AvatarRandomizerProps) {
+    const handleRandomize = () => {
+        onChange(genRandomAvatarConfig());
+    };
+
     return (
-        <View style={[styles.container, layout === "row" ? styles.containerRow : styles.containerGrid, style]}>
-            {AVATAR_OPTIONS.map((option) => {
-                const active = option.id === value;
-                return (
-                    <TouchableOpacity
-                        key={option.id}
-                        onPress={() => onChange(option.id)}
-                        activeOpacity={0.88}
-                        disabled={disabled}
-                        style={[
-                            styles.option,
-                            layout === "row" ? styles.optionRow : styles.optionGrid,
-                            active && styles.optionActive,
-                            disabled && styles.optionDisabled,
-                        ]}
-                    >
-                        <AvatarImage
-                            avatarId={option.id}
-                            size={44}
-                            style={styles.optionImage}
-                            accessibilityLabel={`${option.label} avatar`}
-                        />
-                        <Text style={[styles.optionLabel, active && styles.optionLabelActive]}>
-                            {option.label}
-                        </Text>
-                    </TouchableOpacity>
-                );
-            })}
+        <View style={[styles.container, style]}>
+            <View style={styles.previewWrap}>
+                <UserAvatar config={value} size={72} />
+            </View>
+
+            <TouchableOpacity
+                onPress={handleRandomize}
+                disabled={disabled}
+                activeOpacity={0.85}
+                style={[styles.randomizeButton, disabled && styles.disabledButton]}
+            >
+                <RefreshCw size={14} color={COLORS.primary} />
+                <Text style={styles.randomizeText}>Randomize</Text>
+            </TouchableOpacity>
         </View>
     );
 }
 
+// ─── Styles ──────────────────────────────────────────────────────────────────
+
 const styles = StyleSheet.create({
     container: {
-        flexDirection: "row",
-        flexWrap: "wrap",
-        gap: 8,
-    },
-    containerRow: {
-        flexWrap: "nowrap",
-        justifyContent: "space-between",
-    },
-    containerGrid: {
-        justifyContent: "flex-start",
-    },
-    option: {
-        borderRadius: SKEUO.radius.s,
         alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: COLORS.surfaceDeep,
-        borderWidth: 1,
+        gap: 12,
+    },
+    previewWrap: {
+        borderRadius: SKEUO.radius.l,
+        borderWidth: 2,
         borderColor: COLORS.border,
+        padding: 4,
+        backgroundColor: COLORS.surface,
+    },
+    randomizeButton: {
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 6,
+        borderRadius: SKEUO.radius.pill,
+        paddingHorizontal: 16,
         paddingVertical: 8,
-        paddingHorizontal: 6,
+        backgroundColor: "rgba(47,124,245,0.12)",
+        borderWidth: 1,
+        borderColor: "rgba(47,124,245,0.25)",
     },
-    optionRow: {
-        flex: 1,
-        minWidth: 0,
+    disabledButton: {
+        opacity: 0.5,
     },
-    optionGrid: {
-        width: "31%",
-        minWidth: 88,
-    },
-    optionActive: {
-        borderColor: COLORS.primary,
-        backgroundColor: "rgba(47,124,245,0.14)",
-    },
-    optionDisabled: {
-        opacity: 0.65,
-    },
-    optionImage: {
-        marginBottom: 6,
-    },
-    optionLabel: {
-        color: COLORS.textDim,
-        fontSize: 11,
-        fontWeight: "700",
-    },
-    optionLabelActive: {
+    randomizeText: {
         color: COLORS.primary,
+        fontSize: 13,
+        fontWeight: "700",
     },
 });

@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { AvatarImage } from "../../components/avatar/avatar-ui";
+import { UserAvatar } from "../../components/avatar/avatar-ui";
 import { COLORS, SKEUO } from "../../constants/theme";
 import type { FriendProfile, IncomingFriendRequest, OutgoingFriendRequest } from "../../services/firebase/friends";
 
@@ -70,7 +70,7 @@ export default function FriendRequestCenter({
             ) : (
                 incomingRequests.map((request) => (
                     <View key={request.requesterUid} style={styles.requestRow}>
-                        <AvatarImage avatarId={request.requesterAvatarId} size={40} style={styles.friendAvatar} />
+                        <UserAvatar config={request.requesterAvatarConfig} size={40} style={styles.friendAvatar} />
                         <View style={styles.friendMeta}>
                             <Text style={styles.friendName}>{request.requesterUsername}</Text>
                             <Text style={styles.friendUid}>Pending approval</Text>
@@ -107,7 +107,7 @@ export default function FriendRequestCenter({
             ) : (
                 outgoingRequests.map((request) => (
                     <View key={request.targetUid} style={styles.requestRow}>
-                        <AvatarImage avatarId={request.targetAvatarId} size={40} style={styles.friendAvatar} />
+                        <UserAvatar config={request.targetAvatarConfig} size={40} style={styles.friendAvatar} />
                         <View style={styles.friendMeta}>
                             <Text style={styles.friendName}>{request.targetUsername}</Text>
                             <Text style={styles.friendUid}>Awaiting response</Text>
@@ -131,7 +131,7 @@ export default function FriendRequestCenter({
             ) : (
                 friendProfiles.map((friend) => (
                     <View key={friend.uid} style={styles.friendRow}>
-                        <AvatarImage avatarId={friend.avatarId} size={40} style={styles.friendAvatar} />
+                        <UserAvatar config={friend.avatarConfig} size={40} style={styles.friendAvatar} />
                         <View style={styles.friendMeta}>
                             <Text style={styles.friendName}>{friend.username}</Text>
                             <Text style={styles.friendUid}>{friend.uid.slice(0, 12)}...</Text>

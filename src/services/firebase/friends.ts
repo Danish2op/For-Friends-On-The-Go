@@ -12,20 +12,22 @@ import {
     where,
     type Timestamp,
 } from "firebase/firestore";
+import { type NiceAvatarConfig } from "../../constants/avatars";
 import { db } from "./config";
 import {
     checkUsernameAvailability,
     getUserProfile,
     normalizeUsername,
+    validateUsernameFormat,
     type AvatarId,
     type UserProfile,
-    validateUsernameFormat,
 } from "./users";
 
 export interface FriendProfile {
     uid: string;
     username: string;
     avatarId: AvatarId;
+    avatarConfig: NiceAvatarConfig | null;
 }
 
 export type FriendRequestStatus = "pending" | "accepted" | "rejected" | "cancelled";
@@ -34,9 +36,11 @@ interface FriendRequestRecord {
     requesterUid: string;
     requesterUsername: string;
     requesterAvatarId: AvatarId;
+    requesterAvatarConfig: NiceAvatarConfig | null;
     targetUid: string;
     targetUsername: string;
     targetAvatarId: AvatarId;
+    targetAvatarConfig: NiceAvatarConfig | null;
     status: FriendRequestStatus;
     createdAt: Timestamp | null;
     updatedAt: Timestamp | null;
@@ -47,6 +51,7 @@ export interface IncomingFriendRequest {
     requesterUid: string;
     requesterUsername: string;
     requesterAvatarId: AvatarId;
+    requesterAvatarConfig: NiceAvatarConfig | null;
     status: FriendRequestStatus;
     createdAt: Timestamp | null;
     updatedAt: Timestamp | null;
@@ -57,6 +62,7 @@ export interface OutgoingFriendRequest {
     targetUid: string;
     targetUsername: string;
     targetAvatarId: AvatarId;
+    targetAvatarConfig: NiceAvatarConfig | null;
     status: FriendRequestStatus;
     createdAt: Timestamp | null;
     updatedAt: Timestamp | null;
@@ -67,12 +73,14 @@ const toFriendProfile = (profile: UserProfile): FriendProfile => ({
     uid: profile.uid,
     username: profile.username,
     avatarId: profile.avatarId,
+    avatarConfig: profile.avatarConfig,
 });
 
 const toIncomingRequest = (record: FriendRequestRecord): IncomingFriendRequest => ({
     requesterUid: record.requesterUid,
     requesterUsername: record.requesterUsername,
     requesterAvatarId: record.requesterAvatarId,
+    requesterAvatarConfig: record.requesterAvatarConfig ?? null,
     status: record.status,
     createdAt: record.createdAt ?? null,
     updatedAt: record.updatedAt ?? null,
@@ -83,6 +91,7 @@ const toOutgoingRequest = (record: FriendRequestRecord): OutgoingFriendRequest =
     targetUid: record.targetUid,
     targetUsername: record.targetUsername,
     targetAvatarId: record.targetAvatarId,
+    targetAvatarConfig: record.targetAvatarConfig ?? null,
     status: record.status,
     createdAt: record.createdAt ?? null,
     updatedAt: record.updatedAt ?? null,
@@ -190,9 +199,11 @@ export const createFriendRequestByExactUsername = async (
                 requesterUid: requester.uid,
                 requesterUsername: requester.username,
                 requesterAvatarId: requester.avatarId,
+                requesterAvatarConfig: requester.avatarConfig,
                 targetUid: targetProfile.uid,
                 targetUsername: targetProfile.username,
                 targetAvatarId: targetProfile.avatarId,
+                targetAvatarConfig: targetProfile.avatarConfig,
                 status: "pending",
             };
 

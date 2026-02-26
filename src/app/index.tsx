@@ -1,6 +1,7 @@
+import { UserAvatar } from "@/src/components/avatar/avatar-ui";
 import LobbyInviteNotificationStack from "@/src/components/lobby/lobby-invite-notification-stack";
 import ProfileDrawer from "@/src/components/profile/ProfileDrawer";
-import { getAvatarOptionById } from "@/src/constants/avatars";
+import { type NiceAvatarConfig } from "@/src/constants/avatars";
 import { COLORS, SKEUO } from "@/src/constants/theme";
 import { useAppAuth } from "@/src/context/AuthContext";
 import { useToast } from "@/src/context/ToastContext";
@@ -29,7 +30,6 @@ import {
 } from "@/src/services/notifications/invites";
 import { useFocusEffect } from "@react-navigation/native";
 import * as Haptics from "expo-haptics";
-import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import { FirebaseError } from "firebase/app";
@@ -99,6 +99,7 @@ export default function HomeScreen() {
         username,
         displayName,
         avatarId,
+        avatarConfig,
         friends,
         loading,
         signedIn,
@@ -232,7 +233,7 @@ export default function HomeScreen() {
     }, [friendProfiles]);
 
     const actorName = useMemo(() => username || displayName || "Friend", [displayName, username]);
-    const avatarOption = useMemo(() => getAvatarOptionById(avatarId), [avatarId]);
+
     const selectedInviteUids = useMemo(
         () => Object.entries(inviteSelection).filter(([, selected]) => selected).map(([uid]) => uid),
         [inviteSelection]
@@ -256,11 +257,13 @@ export default function HomeScreen() {
         setActiveAction("create");
 
         try {
+            console.log("[LobbyCreate] selectedInviteUids:", selectedInviteUids);
             const createdLobby = await createLobbySession({
                 hostUid: userId,
                 hostName: actorName,
                 inviteeUids: selectedInviteUids,
             });
+            console.log("[LobbyCreate] invitedRecipientUids:", createdLobby.invitedRecipientUids);
             await recordLobbyHistory({
                 uid: userId,
                 sessionId: createdLobby.lobbyId,
@@ -270,6 +273,7 @@ export default function HomeScreen() {
             });
 
             if (createdLobby.invitedRecipientUids.length > 0) {
+                console.log("[LobbyCreate] Sending push invites to", createdLobby.invitedRecipientUids.length, "recipients…");
                 try {
                     const inviteResult = await sendLobbyInvites({
                         lobbyId: createdLobby.lobbyId,
@@ -289,6 +293,8 @@ export default function HomeScreen() {
                 } catch (error) {
                     toast.show(parseError(error, "Invite delivery failed"), "error");
                 }
+            } else {
+                console.log("[LobbyCreate] No invitees selected — skipping push notifications.");
             }
 
             setInviteSelection({});
@@ -349,15 +355,15 @@ export default function HomeScreen() {
         }
     };
 
-    const handleSelectAvatar = async (selectedAvatarId: "1" | "2" | "3" | "4" | "5") => {
-        if (!userId || selectedAvatarId === avatarId) {
+    const handleSelectAvatar = async (newConfig: NiceAvatarConfig) => {
+        if (!userId) {
             return;
         }
 
         await Haptics.selectionAsync();
         setAvatarUpdating(true);
         try {
-            await updateUserAvatar(userId, selectedAvatarId);
+            await updateUserAvatar(userId, avatarId as "1" | "2" | "3" | "4" | "5" ?? "1", newConfig);
             await refreshProfile();
             toast.show("Avatar updated", "success");
         } catch (error) {
@@ -564,7 +570,7 @@ export default function HomeScreen() {
 
                 <View style={styles.identityShell}>
                     <View style={styles.identityCard}>
-                        <Image source={avatarOption.source} style={styles.identityAvatar} contentFit="cover" />
+                        <UserAvatar config={avatarConfig} size={42} />
                         <View style={styles.identityTextWrap}>
                             <Text style={styles.identityLabel}>Signed in as</Text>
                             <Text style={styles.identityName}>{actorName}</Text>
@@ -631,11 +637,7 @@ export default function HomeScreen() {
                                                     disabled={isBusy}
                                                     activeOpacity={0.9}
                                                 >
-                                                    <Image
-                                                        source={getAvatarOptionById(friend.avatarId).source}
-                                                        style={styles.inviteAvatar}
-                                                        contentFit="cover"
-                                                    />
+                                                    <UserAvatar config={friend.avatarConfig} size={32} />
                                                     <Text
                                                         style={[
                                                             styles.inviteChipText,
@@ -701,7 +703,7 @@ export default function HomeScreen() {
                 visible={profileOpen}
                 onClose={() => setProfileOpen(false)}
                 username={actorName}
-                avatarId={avatarId as "1" | "2" | "3" | "4" | "5" | null}
+                avatarConfig={avatarConfig}
                 updatingAvatar={avatarUpdating}
                 friendProfiles={friendProfiles}
                 incomingRequests={incomingRequests}

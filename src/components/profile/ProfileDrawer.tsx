@@ -1,5 +1,5 @@
 import { ChevronRight, Clock3, LogOut, Users, X } from "lucide-react-native";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
     Animated,
     Dimensions,
@@ -11,16 +11,16 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
-import { AvatarImage, AvatarSelector } from "../../components/avatar/avatar-ui";
+import { AvatarRandomizer, UserAvatar } from "../../components/avatar/avatar-ui";
 import FriendRequestCenter from "../../components/friends/friend-request-center";
-import { getAvatarOptionById, type AvatarId } from "../../constants/avatars";
+import { type NiceAvatarConfig } from "../../constants/avatars";
 import { COLORS, SKEUO } from "../../constants/theme";
 import type { FriendProfile, IncomingFriendRequest, OutgoingFriendRequest } from "../../services/firebase/friends";
 
 interface ProfileDrawerProps {
     visible: boolean;
     username: string;
-    avatarId: AvatarId | null;
+    avatarConfig: NiceAvatarConfig | null;
     updatingAvatar: boolean;
     friendProfiles: FriendProfile[];
     incomingRequests: IncomingFriendRequest[];
@@ -35,7 +35,7 @@ interface ProfileDrawerProps {
     removingFriendUid: string | null;
     onClose: () => void;
     onSignOut: () => Promise<void>;
-    onSelectAvatar: (avatarId: AvatarId) => Promise<void>;
+    onSelectAvatar: (config: NiceAvatarConfig) => Promise<void>;
     onOpenHistory: () => void;
     onChangeFriendSearch: (value: string) => void;
     onSearchFriend: () => Promise<void>;
@@ -51,7 +51,7 @@ const PANEL_WIDTH = Math.min(388, SCREEN_WIDTH * 0.88);
 export default function ProfileDrawer({
     visible,
     username,
-    avatarId,
+    avatarConfig,
     updatingAvatar,
     friendProfiles,
     incomingRequests,
@@ -119,7 +119,6 @@ export default function ProfileDrawer({
         });
     }, [backdrop, mounted, slideX, visible]);
 
-    const selectedAvatar = useMemo(() => getAvatarOptionById(avatarId), [avatarId]);
 
     if (!mounted) {
         return null;
@@ -150,21 +149,20 @@ export default function ProfileDrawer({
                         </View>
 
                         <View style={styles.profileCard}>
-                            <AvatarImage avatarId={selectedAvatar.id} size={66} style={styles.profileAvatar} />
+                            <UserAvatar config={avatarConfig} size={66} style={styles.profileAvatar} />
                             <View style={styles.profileTextWrap}>
                                 <Text style={styles.usernameLabel}>Username</Text>
                                 <Text style={styles.usernameText}>{username}</Text>
                             </View>
                         </View>
 
-                        <Text style={styles.sectionLabel}>Avatar Selection</Text>
-                        <AvatarSelector
-                            value={selectedAvatar.id}
-                            onChange={(nextAvatar) => {
-                                void onSelectAvatar(nextAvatar);
+                        <Text style={styles.sectionLabel}>Avatar</Text>
+                        <AvatarRandomizer
+                            value={avatarConfig ?? ({} as NiceAvatarConfig)}
+                            onChange={(nextConfig) => {
+                                void onSelectAvatar(nextConfig);
                             }}
                             disabled={updatingAvatar}
-                            layout="grid"
                         />
 
                         {/* Lobby History Navigation Button */}

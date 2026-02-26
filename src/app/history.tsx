@@ -5,8 +5,9 @@ import {
     type LobbyHistoryItem,
 } from "@/src/services/firebase/history";
 import { Ionicons } from "@expo/vector-icons";
+import { useFocusEffect } from "@react-navigation/native";
 import { router, Stack } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
     ActivityIndicator,
     FlatList,
@@ -93,13 +94,29 @@ export default function HistoryScreen() {
         return unsubscribe;
     }, [userId]);
 
+    // Synchronous ref-based lock to prevent overlapping detail modals.
+    // Ref (not state) because we need the lock to take effect in the same
+    // call frame — before React batches a re-render.
+    const navigatingRef = useRef(false);
+
+    // Auto-reset when the user navigates back to this screen.
+    useFocusEffect(
+        useCallback(() => {
+            navigatingRef.current = false;
+        }, [])
+    );
+
     const renderItem = ({ item }: { item: LobbyHistoryItem }) => {
         const statusColor = STATUS_COLORS[item.status] ?? COLORS.muted;
 
         return (
             <TouchableOpacity
                 activeOpacity={0.85}
-                onPress={() => router.push(`/history-detail?sessionId=${item.sessionId}`)}
+                onPress={() => {
+                    if (navigatingRef.current) return;
+                    navigatingRef.current = true;
+                    router.push(`/history-detail?sessionId=${item.sessionId}`);
+                }}
                 style={styles.card}
             >
                 <View style={styles.cardTopRow}>

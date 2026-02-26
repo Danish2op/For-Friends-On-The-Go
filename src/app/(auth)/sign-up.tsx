@@ -1,12 +1,26 @@
-import { FirebaseError } from "firebase/app";
+import { AvatarRandomizer } from "@/src/components/avatar/avatar-ui";
+import { genRandomAvatarConfig, type NiceAvatarConfig } from "@/src/constants/avatars";
+import { useAppAuth } from "@/src/context/AuthContext";
+import { useToast } from "@/src/context/ToastContext";
+import { useUsernameAvailability } from "@/src/hooks/use-username-availability";
+import { auth } from "@/src/services/firebase/config";
 import {
-    createUserWithEmailAndPassword,
-    onAuthStateChanged,
-    signOut as firebaseSignOut,
-} from "firebase/auth";
+    normalizeEmail,
+    ProfileRegistrationError,
+    registerUserProfile,
+    UsernameTakenError,
+    validateEmailFormat,
+    type AvatarId,
+} from "@/src/services/firebase/users";
 import * as Haptics from "expo-haptics";
 import { LinearGradient } from "expo-linear-gradient";
 import { router, useLocalSearchParams } from "expo-router";
+import { FirebaseError } from "firebase/app";
+import {
+    createUserWithEmailAndPassword,
+    signOut as firebaseSignOut,
+    onAuthStateChanged,
+} from "firebase/auth";
 import { Lock, Mail, UserRound } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
 import {
@@ -19,20 +33,7 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
-import { AvatarSelector } from "@/src/components/avatar/avatar-ui";
 import { COLORS, SHADOWS, SKEUO, TYPE } from "../../../constants/theme";
-import { useToast } from "@/src/context/ToastContext";
-import { useUsernameAvailability } from "@/src/hooks/use-username-availability";
-import { auth } from "@/src/services/firebase/config";
-import {
-    normalizeEmail,
-    ProfileRegistrationError,
-    registerUserProfile,
-    validateEmailFormat,
-    UsernameTakenError,
-    type AvatarId,
-} from "@/src/services/firebase/users";
-import { useAppAuth } from "@/src/context/AuthContext";
 
 type SetupPhase = "credentials" | "profile";
 
@@ -99,7 +100,8 @@ export default function SignUpScreen() {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [username, setUsername] = useState("");
-    const [avatarId, setAvatarId] = useState<AvatarId>("1");
+    const [avatarId] = useState<AvatarId>("1");
+    const [avatarConfig, setAvatarConfig] = useState<NiceAvatarConfig>(genRandomAvatarConfig);
     const [registeredUid, setRegisteredUid] = useState<string | null>(auth.currentUser?.uid ?? null);
     const [submitting, setSubmitting] = useState(false);
 
@@ -180,6 +182,7 @@ export default function SignUpScreen() {
                     email: normalizedEmail,
                     username: normalizedUsername,
                     avatarId,
+                    avatarConfig,
                 });
             } catch (error) {
                 if (error instanceof UsernameTakenError) {
@@ -444,12 +447,11 @@ export default function SignUpScreen() {
                                         />
                                     </View>
 
-                                    <Text style={styles.avatarLabel}>Choose Avatar</Text>
-                                    <AvatarSelector
-                                        value={avatarId}
-                                        onChange={setAvatarId}
+                                    <Text style={styles.avatarLabel}>Your Avatar</Text>
+                                    <AvatarRandomizer
+                                        value={avatarConfig}
+                                        onChange={setAvatarConfig}
                                         disabled={submitting}
-                                        layout="row"
                                         style={styles.avatarSelector}
                                     />
 
@@ -505,12 +507,11 @@ export default function SignUpScreen() {
                                         </Text>
                                     </View>
 
-                                    <Text style={styles.avatarLabel}>Choose Avatar</Text>
-                                    <AvatarSelector
-                                        value={avatarId}
-                                        onChange={setAvatarId}
+                                    <Text style={styles.avatarLabel}>Your Avatar</Text>
+                                    <AvatarRandomizer
+                                        value={avatarConfig}
+                                        onChange={setAvatarConfig}
                                         disabled={submitting}
-                                        layout="row"
                                         style={styles.avatarSelector}
                                     />
 

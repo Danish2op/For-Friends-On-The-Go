@@ -9,6 +9,7 @@ import {
     type QuerySnapshot,
 } from "firebase/firestore";
 import { useEffect, useMemo, useState } from "react";
+import { isValidAvatarConfig } from "../constants/avatars";
 import { db } from "../services/firebase/config";
 import type {
     FriendRequestStatus,
@@ -20,9 +21,11 @@ type FriendRequestRecord = {
     requesterUid?: unknown;
     requesterUsername?: unknown;
     requesterAvatarId?: unknown;
+    requesterAvatarConfig?: unknown;
     targetUid?: unknown;
     targetUsername?: unknown;
     targetAvatarId?: unknown;
+    targetAvatarConfig?: unknown;
     status?: unknown;
     createdAt?: unknown;
     updatedAt?: unknown;
@@ -117,6 +120,7 @@ const toIncoming = (raw: FriendRequestRecord): IncomingFriendRequest | null => {
         requesterUid: raw.requesterUid.trim(),
         requesterUsername: raw.requesterUsername.trim(),
         requesterAvatarId: toAvatarId(raw.requesterAvatarId),
+        requesterAvatarConfig: isValidAvatarConfig(raw.requesterAvatarConfig) ? raw.requesterAvatarConfig : null,
         status: raw.status,
         createdAt: asTimestamp(raw.createdAt as FirestoreTimestampLike),
         updatedAt: asTimestamp(raw.updatedAt as FirestoreTimestampLike),
@@ -139,6 +143,7 @@ const toOutgoing = (raw: FriendRequestRecord): OutgoingFriendRequest | null => {
         targetUid: raw.targetUid.trim(),
         targetUsername: raw.targetUsername.trim(),
         targetAvatarId: toAvatarId(raw.targetAvatarId),
+        targetAvatarConfig: isValidAvatarConfig(raw.targetAvatarConfig) ? raw.targetAvatarConfig : null,
         status: raw.status,
         createdAt: asTimestamp(raw.createdAt as FirestoreTimestampLike),
         updatedAt: asTimestamp(raw.updatedAt as FirestoreTimestampLike),

@@ -35,6 +35,9 @@ yarn-error.*
 .env
 .env*.local
 
+# local guide
+EAS_BUILD_GUIDE.md
+
 # Firebase native config
 google-services.json
 GoogleService-Info.plist

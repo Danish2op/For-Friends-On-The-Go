@@ -1,6 +1,7 @@
 import { FirebaseError } from "firebase/app";
-import { onAuthStateChanged, signOut as firebaseSignOut } from "firebase/auth";
+import { signOut as firebaseSignOut, onAuthStateChanged } from "firebase/auth";
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { type NiceAvatarConfig } from "../constants/avatars";
 import { auth, waitForFirebaseInitialization } from "../services/firebase/config";
 import { AvatarId, getUserProfile, type UserProfile } from "../services/firebase/users";
 
@@ -9,6 +10,7 @@ interface AuthContextValue {
     displayName: string;
     username: string | null;
     avatarId: AvatarId | null;
+    avatarConfig: NiceAvatarConfig | null;
     friends: string[];
     profileState: "idle" | "loading" | "ready" | "missing" | "error";
     profileError: string | null;
@@ -216,6 +218,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
             displayName: profile?.username ?? getFallbackDisplayName(),
             username: profile?.username ?? null,
             avatarId: profile?.avatarId ?? null,
+            avatarConfig: profile?.avatarConfig ?? null,
             friends: profile?.friends ?? [],
             profileState,
             profileError,

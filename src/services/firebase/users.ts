@@ -9,6 +9,7 @@ import {
     updateDoc,
     type DocumentData,
 } from "firebase/firestore";
+import { isValidAvatarConfig, type NiceAvatarConfig } from "../../constants/avatars";
 import { auth, db } from "./config";
 
 export type AvatarId = "1" | "2" | "3" | "4" | "5";
@@ -20,6 +21,7 @@ export interface UserProfile {
     username: string;
     usernameLower: string;
     avatarId: AvatarId;
+    avatarConfig: NiceAvatarConfig | null;
     friends: string[];
     lastSeen: Timestamp | null;
     createdAt: Timestamp | null;
@@ -33,6 +35,7 @@ interface UsernameIndexEntry {
     usernameLower: string;
     emailNormalized: string;
     avatarId: AvatarId;
+    avatarConfig: NiceAvatarConfig | null;
     createdAt: Timestamp | null;
     updatedAt: Timestamp | null;
 }
@@ -42,6 +45,7 @@ interface RegisterProfileInput {
     email: string;
     username: string;
     avatarId: AvatarId;
+    avatarConfig: NiceAvatarConfig | null;
 }
 
 export interface UsernameAvailabilityResult {
@@ -161,6 +165,7 @@ const parseUserProfile = (uid: string, payload: DocumentData): { profile: UserPr
             : email;
 
     const avatarId = isAvatarId(payload.avatarId) ? payload.avatarId : "1";
+    const avatarConfig = isValidAvatarConfig(payload.avatarConfig) ? payload.avatarConfig : null;
     const friends = normalizeFriends(payload.friends);
     const createdAt = asTimestamp(payload.createdAt);
     const updatedAt = asTimestamp(payload.updatedAt);
@@ -184,6 +189,7 @@ const parseUserProfile = (uid: string, payload: DocumentData): { profile: UserPr
         username,
         usernameLower,
         avatarId,
+        avatarConfig,
         friends,
         lastSeen,
         createdAt,
@@ -392,11 +398,12 @@ export const checkUsernameAvailability = async (
     };
 };
 
-export const updateUserAvatar = async (uid: string, avatarId: AvatarId) => {
+export const updateUserAvatar = async (uid: string, avatarId: AvatarId, avatarConfig: NiceAvatarConfig | null) => {
     const profile = await getUserProfile(uid);
 
     await updateDoc(doc(db, USER_COLLECTION, uid), {
         avatarId,
+        avatarConfig,
         lastSeen: serverTimestamp(),
         updatedAt: serverTimestamp(),
         profileVersion: PROFILE_SCHEMA_VERSION,
@@ -411,6 +418,7 @@ export const updateUserAvatar = async (uid: string, avatarId: AvatarId) => {
                 usernameLower: profile.usernameLower,
                 emailNormalized: profile.emailNormalized,
                 avatarId,
+                avatarConfig,
                 updatedAt: serverTimestamp(),
                 createdAt: profile.createdAt ?? serverTimestamp(),
             },
@@ -441,6 +449,7 @@ export const registerUserProfile = async (input: RegisterProfileInput): Promise<
     if (!isAvatarId(input.avatarId)) {
         throw new Error("Invalid avatar selection.");
     }
+    const avatarConfig = input.avatarConfig ?? null;
 
     const userRef = doc(db, USER_COLLECTION, input.uid);
     const usernameRef = doc(db, USERNAME_INDEX_COLLECTION, usernameLower);
@@ -481,6 +490,7 @@ export const registerUserProfile = async (input: RegisterProfileInput): Promise<
                 username,
                 usernameLower,
                 avatarId: input.avatarId,
+                avatarConfig,
                 friends: existingFriends,
                 lastSeen: now,
                 createdAt: existingCreatedAt ?? now,
@@ -500,6 +510,7 @@ export const registerUserProfile = async (input: RegisterProfileInput): Promise<
                     usernameLower,
                     emailNormalized,
                     avatarId: input.avatarId,
+                    avatarConfig,
                     createdAt: existingIndexCreatedAt ?? now,
                     updatedAt: now,
                 },
