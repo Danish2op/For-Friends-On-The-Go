@@ -21,6 +21,7 @@ interface AuthContextValue {
     profileComplete: boolean;
     signInWithName: (name: string) => Promise<string>;
     updateDisplayName: (name: string) => Promise<void>;
+    updateAvatarOptimistic: (config: NiceAvatarConfig) => void;
     refreshProfile: () => Promise<UserProfile | null>;
     signOut: () => Promise<void>;
 }
@@ -212,6 +213,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         setProfileError(null);
     }, []);
 
+    const updateAvatarOptimistic = useCallback((config: NiceAvatarConfig) => {
+        setProfile((prev) => {
+            if (!prev) return prev;
+            return { ...prev, avatarConfig: config };
+        });
+    }, []);
+
     const value = useMemo<AuthContextValue>(
         () => ({
             userId,
@@ -236,10 +244,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
             updateDisplayName: async () => {
                 throw new Error("Display name updates are managed through the profile service.");
             },
+            updateAvatarOptimistic,
             refreshProfile,
             signOut,
         }),
-        [authReady, profile, profileError, profileLoading, profileState, refreshProfile, signOut, userId]
+        [authReady, profile, profileError, profileLoading, profileState, refreshProfile, signOut, updateAvatarOptimistic, userId]
     );
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
