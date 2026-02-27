@@ -105,6 +105,7 @@ export default function HomeScreen() {
         signedIn,
         profileComplete,
         profileState,
+        updateAvatarOptimistic,
         refreshProfile,
         signOut,
     } = useAppAuth();
@@ -280,6 +281,7 @@ export default function HomeScreen() {
                         lobbyId: createdLobby.lobbyId,
                         lobbyCode: createdLobby.lobbyCode,
                         hostUsername: actorName,
+                        hostUid: userId,
                         recipientUids: createdLobby.invitedRecipientUids,
                     });
 
@@ -364,11 +366,17 @@ export default function HomeScreen() {
 
         await Haptics.selectionAsync();
         setAvatarUpdating(true);
+
+        // Optimistic UI: update local state immediately so the Drawer
+        // reflects the new avatar without a full AuthContext refresh.
+        updateAvatarOptimistic(newConfig);
+
         try {
             await updateUserAvatar(userId, avatarId as "1" | "2" | "3" | "4" | "5" ?? "1", newConfig);
-            await refreshProfile();
             toast.show("Avatar updated", "success");
         } catch (error) {
+            // Rollback: re-fetch the real profile on failure.
+            await refreshProfile().catch(() => { });
             toast.show(parseError(error, "Could not update avatar"), "error");
         } finally {
             if (mountedRef.current) {
@@ -438,11 +446,16 @@ export default function HomeScreen() {
 
         await Haptics.selectionAsync();
         setRemovingFriendUid(friendUid);
+
+        // Optimistic UI: remove from local list immediately.
+        setFriendProfiles((prev) => prev.filter((f) => f.uid !== friendUid));
+
         try {
             await removeFriendBidirectional(userId, friendUid);
-            await refreshProfile();
             toast.show("Friend removed", "info");
         } catch (error) {
+            // Rollback: re-fetch the real friend list on failure.
+            await refreshProfile().catch(() => { });
             toast.show(parseError(error, "Unable to remove friend"), "error");
         } finally {
             if (mountedRef.current) {
