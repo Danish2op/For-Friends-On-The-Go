@@ -167,16 +167,28 @@ export const createFriendRequestByExactUsername = async (
 
     try {
         await runTransaction(db, async (transaction) => {
-            const [incomingSnap, outgoingSnap, reverseIncomingSnap] = await Promise.all([
+            // ── ALL READS (Firestore requires reads before writes) ───────
+            const reverseOutgoingRef = doc(db, "users", target.uid, "sentFriendRequests", requesterUid);
+
+            const [incomingSnap, outgoingSnap, reverseIncomingSnap, reverseOutgoingSnap] = await Promise.all([
                 transaction.get(incomingRequestRef),
                 transaction.get(outgoingRequestRef),
                 transaction.get(reverseIncomingRef),
+                transaction.get(reverseOutgoingRef),
             ]);
 
+            // ── VALIDATION ──────────────────────────────────────────────
+            // Block if there's already a pending request in either direction.
             if (reverseIncomingSnap.exists()) {
                 const reverseRequest = reverseIncomingSnap.data() as FriendRequestRecord;
                 if (reverseRequest.status === "pending") {
                     throw new Error("You already have a pending request from this user.");
+                }
+            }
+            if (reverseOutgoingSnap.exists()) {
+                const reverseOutgoing = reverseOutgoingSnap.data() as FriendRequestRecord;
+                if (reverseOutgoing.status === "pending") {
+                    throw new Error("This user already has a pending request from you.");
                 }
             }
 
@@ -194,6 +206,11 @@ export const createFriendRequestByExactUsername = async (
                 }
             }
 
+            // ── WRITES ──────────────────────────────────────────────────
+            // set() will CREATE if the doc doesn't exist (first-time add),
+            // or UPDATE if it exists with a terminal status (re-add).
+            // No delete() calls — Firestore merges delete+set into UPDATE
+            // which breaks the create rule path.
             const now = serverTimestamp();
             const requestPayload: Omit<FriendRequestRecord, "createdAt" | "updatedAt" | "respondedAt"> = {
                 requesterUid: requester.uid,
@@ -411,6 +428,12 @@ export const removeFriendBidirectional = async (requesterUid: string, friendUid:
     const requesterRef = doc(db, "users", requesterUid);
     const friendRef = doc(db, "users", friendUid);
 
+    // All 4 possible stale friend request documents between the two users.
+    const incomingOnFriendRef = doc(db, "users", friendUid, "friendRequests", requesterUid);
+    const outgoingOnRequesterRef = doc(db, "users", requesterUid, "sentFriendRequests", friendUid);
+    const incomingOnRequesterRef = doc(db, "users", requesterUid, "friendRequests", friendUid);
+    const outgoingOnFriendRef = doc(db, "users", friendUid, "sentFriendRequests", requesterUid);
+
     try {
         await runTransaction(db, async (transaction) => {
             const [requesterSnap, friendSnap] = await Promise.all([
@@ -423,6 +446,8 @@ export const removeFriendBidirectional = async (requesterUid: string, friendUid:
             }
 
             const now = serverTimestamp();
+
+            // Remove each user from the other's friends array.
             transaction.update(requesterRef, {
                 friends: arrayRemove(friendUid),
                 lastSeen: now,
@@ -433,6 +458,12 @@ export const removeFriendBidirectional = async (requesterUid: string, friendUid:
                 lastSeen: now,
                 updatedAt: now,
             });
+
+            // Clean up all stale friend request docs to enable future re-adds.
+            transaction.delete(incomingOnFriendRef);
+            transaction.delete(outgoingOnRequesterRef);
+            transaction.delete(incomingOnRequesterRef);
+            transaction.delete(outgoingOnFriendRef);
         });
     } catch (error: unknown) {
         if (error instanceof FirebaseError && error.code === "permission-denied") {

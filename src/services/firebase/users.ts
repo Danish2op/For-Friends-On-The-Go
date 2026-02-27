@@ -146,7 +146,7 @@ export const validateEmailFormat = (email: string) => {
     return EMAIL_REGEX.test(normalizeEmail(email));
 };
 
-const parseUserProfile = (uid: string, payload: DocumentData): { profile: UserProfile; requiresRepair: boolean } | null => {
+export const parseUserProfile = (uid: string, payload: DocumentData): { profile: UserProfile; requiresRepair: boolean } | null => {
     const username = typeof payload.username === "string" ? normalizeUsername(payload.username) : "";
     const usernameLower =
         typeof payload.usernameLower === "string" && payload.usernameLower.trim().length > 0

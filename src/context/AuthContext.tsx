@@ -1,9 +1,10 @@
 import { FirebaseError } from "firebase/app";
 import { signOut as firebaseSignOut, onAuthStateChanged } from "firebase/auth";
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { doc, onSnapshot as firestoreOnSnapshot } from "firebase/firestore";
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { type NiceAvatarConfig } from "../constants/avatars";
-import { auth, waitForFirebaseInitialization } from "../services/firebase/config";
-import { AvatarId, getUserProfile, type UserProfile } from "../services/firebase/users";
+import { auth, db, waitForFirebaseInitialization } from "../services/firebase/config";
+import { AvatarId, getUserProfile, parseUserProfile, type UserProfile } from "../services/firebase/users";
 
 interface AuthContextValue {
     userId: string | null;
@@ -128,54 +129,77 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         };
     }, []);
 
+    // Track whether the initial profile load has completed to avoid loading flicker on real-time updates.
+    const initialProfileLoadDone = useRef(false);
+
     useEffect(() => {
-        let active = true;
+        if (!userId) {
+            setProfile(null);
+            setProfileLoading(false);
+            setProfileState("idle");
+            setProfileError(null);
+            initialProfileLoadDone.current = false;
+            return;
+        }
 
-        const syncProfile = async () => {
-            if (!userId) {
-                if (active) {
+        // Show loading state only on initial load, not on subsequent real-time updates.
+        if (!initialProfileLoadDone.current) {
+            setProfileLoading(true);
+            setProfileState("loading");
+            setProfileError(null);
+        }
+
+        const userDocRef = doc(db, "users", userId);
+
+        const unsubscribeProfile = firestoreOnSnapshot(
+            userDocRef,
+            (snapshot) => {
+                if (!snapshot.exists()) {
                     setProfile(null);
+                    setProfileState("missing");
                     setProfileLoading(false);
-                    setProfileState("idle");
-                    setProfileError(null);
+                    initialProfileLoadDone.current = true;
+                    return;
                 }
-                return;
-            }
 
-            if (active) {
-                setProfileLoading(true);
-                setProfileState("loading");
+                const parsed = parseUserProfile(userId, snapshot.data());
+                if (!parsed) {
+                    setProfile(null);
+                    setProfileState("missing");
+                    setProfileLoading(false);
+                    initialProfileLoadDone.current = true;
+                    return;
+                }
+
+                setProfile(parsed.profile);
+                setProfileState("ready");
                 setProfileError(null);
-            }
-
-            try {
-                const existingProfile = await fetchProfileWithRetry(userId);
-                if (active) {
-                    setProfile(existingProfile);
-                    setProfileState(existingProfile ? "ready" : "missing");
-                }
-            } catch (error: unknown) {
-                if (active) {
+                setProfileLoading(false);
+                initialProfileLoadDone.current = true;
+            },
+            async (error) => {
+                // On permission-denied, attempt a single token refresh + one-shot fallback.
+                if (error instanceof FirebaseError && error.code === "permission-denied" && auth.currentUser?.uid === userId) {
+                    try {
+                        await auth.currentUser.getIdToken(true);
+                        const fallback = await getUserProfile(userId);
+                        setProfile(fallback);
+                        setProfileState(fallback ? "ready" : "missing");
+                    } catch {
+                        setProfileState("error");
+                        setProfileError("Profile sync failed after token refresh.");
+                    }
+                } else {
                     setProfileState("error");
                     setProfileError(error instanceof Error ? error.message : "Profile sync failed.");
                 }
-            } finally {
-                if (active) {
-                    setProfileLoading(false);
-                }
-            }
-        };
-
-        syncProfile().catch(() => {
-            if (active) {
-                setProfileState("error");
-                setProfileError("Profile sync failed.");
                 setProfileLoading(false);
+                initialProfileLoadDone.current = true;
             }
-        });
+        );
 
         return () => {
-            active = false;
+            unsubscribeProfile();
         };
     }, [userId]);
 

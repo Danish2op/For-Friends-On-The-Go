@@ -454,8 +454,7 @@ export default function HomeScreen() {
             await removeFriendBidirectional(userId, friendUid);
             toast.show("Friend removed", "info");
         } catch (error) {
-            // Rollback: re-fetch the real friend list on failure.
-            await refreshProfile().catch(() => { });
+            // Real-time listener in AuthContext will re-sync the friend list.
             toast.show(parseError(error, "Unable to remove friend"), "error");
         } finally {
             if (mountedRef.current) {
@@ -474,7 +473,6 @@ export default function HomeScreen() {
         setRespondingRequestUid(requesterUid);
         try {
             await respondToFriendRequest(userId, requesterUid, "accept");
-            await refreshProfile();
             toast.show("Friend request accepted", "success");
         } catch (error) {
             toast.show(parseError(error, "Unable to accept request"), "error");

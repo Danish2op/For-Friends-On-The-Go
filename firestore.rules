@@ -322,10 +322,24 @@ service cloud.firestore {
               request.auth.uid == requesterUid
               && isFriendRequestTransition(request.resource.data, resource.data, 'cancelled')
             )
+            ||
+            (
+              // Re-add: overwrite a terminal doc with a fresh pending request.
+              request.auth.uid == requesterUid
+              && uid != request.auth.uid
+              && resource.data.status in ['accepted', 'rejected', 'cancelled']
+              && isPendingFriendRequestCreate(request.resource.data, requesterUid, uid)
+              && exists(userPath(uid))
+              && exists(userPath(request.auth.uid))
+              && !(uid in get(userPath(request.auth.uid)).data.friends)
+              && !(request.auth.uid in get(userPath(uid)).data.friends)
+            )
           )
           && getAfter(outgoingRequestPath(requesterUid, uid)).data.status == request.resource.data.status;
 
-        allow delete: if false;
+        allow delete: if isSignedIn()
+          && (isSelf(uid) || request.auth.uid == requesterUid)
+          && resource.data.status != 'pending';
       }
 
       match /sentFriendRequests/{targetUid} {
@@ -352,10 +366,24 @@ service cloud.firestore {
               && (isFriendRequestTransition(request.resource.data, resource.data, 'accepted')
                 || isFriendRequestTransition(request.resource.data, resource.data, 'rejected'))
             )
+            ||
+            (
+              // Re-add: overwrite a terminal doc with a fresh pending request.
+              isSelf(uid)
+              && uid != targetUid
+              && resource.data.status in ['accepted', 'rejected', 'cancelled']
+              && isPendingFriendRequestCreate(request.resource.data, uid, targetUid)
+              && exists(userPath(uid))
+              && exists(userPath(targetUid))
+              && !(targetUid in get(userPath(uid)).data.friends)
+              && !(uid in get(userPath(targetUid)).data.friends)
+            )
           )
           && getAfter(incomingRequestPath(targetUid, uid)).data.status == request.resource.data.status;
 
-        allow delete: if false;
+        allow delete: if isSignedIn()
+          && (isSelf(uid) || request.auth.uid == targetUid)
+          && resource.data.status != 'pending';
       }
 
       match /lobbyInvites/{inviteId} {
