@@ -3,9 +3,10 @@ import * as Notifications from "expo-notifications";
 import {
     collection,
     doc,
+    getDoc,
     getDocs,
     serverTimestamp,
-    setDoc,
+    setDoc
 } from "firebase/firestore";
 import { Platform } from "react-native";
 import { db } from "../firebase/config";
@@ -20,6 +21,7 @@ interface InvitePayload {
     lobbyId: string;
     lobbyCode: string;
     hostUsername: string;
+    hostUid: string;
     recipientUids: string[];
 }
 
@@ -210,9 +212,34 @@ export const sendLobbyInvites = async (payload: InvitePayload): Promise<SendInvi
         return { targetedRecipients: 0, targetedTokens: 0, delivered: 0 };
     }
 
-    console.log(TAG, `Sending invites to ${recipients.length} recipient(s) for lobby=${payload.lobbyCode}`);
+    // ── Mutual-friend pre-flight ─────────────────────────────────────────
+    // Read the sender's friend list and filter out any recipient who is no
+    // longer a mutual friend. Prevents ghost invites from stale UI caches.
+    let verifiedRecipients = recipients;
+    try {
+        const hostDocRef = doc(db, "users", payload.hostUid);
+        const hostDoc = await getDoc(hostDocRef);
+        if (hostDoc.exists()) {
+            const hostFriends: string[] = (hostDoc.data().friends as string[]) ?? [];
+            const friendSet = new Set(hostFriends);
+            verifiedRecipients = recipients.filter((uid) => {
+                if (friendSet.has(uid)) return true;
+                console.warn(TAG, `Dropping non-friend uid=${uid.slice(0, 8)}… from invite list.`);
+                return false;
+            });
+        }
+    } catch (error) {
+        console.warn(TAG, "Mutual-friend preflight failed — proceeding with original list:", error);
+    }
 
-    const tokens = await collectRecipientTokens(recipients);
+    if (verifiedRecipients.length === 0) {
+        console.warn(TAG, "No verified mutual friends in recipient list.");
+        return { targetedRecipients: recipients.length, targetedTokens: 0, delivered: 0 };
+    }
+
+    console.log(TAG, `Sending invites to ${verifiedRecipients.length} verified recipient(s) for lobby=${payload.lobbyCode}`);
+
+    const tokens = await collectRecipientTokens(verifiedRecipients);
     if (tokens.length === 0) {
         console.warn(TAG, "No valid push tokens found across all recipients.");
         return { targetedRecipients: recipients.length, targetedTokens: 0, delivered: 0 };
