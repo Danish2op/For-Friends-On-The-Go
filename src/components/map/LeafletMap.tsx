@@ -1,6 +1,6 @@
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import { WebView } from 'react-native-webview';
 
 interface Location {
@@ -97,8 +97,16 @@ const getMapHTML = () => `
             iconAnchor: [15, 30]
         });
 
+        // Programmatic move guard — prevents feedback loops
+        var isProgrammaticMove = false;
+
         // Event Listeners: Region Change (Drag/Zoom)
         map.on('moveend', function() {
+            if (isProgrammaticMove) {
+                isProgrammaticMove = false;
+                return; // Suppress echo for programmatic moves
+            }
+
             var center = map.getCenter();
             var zoom = map.getZoom();
             var bounds = map.getBounds();
@@ -142,6 +150,7 @@ const getMapHTML = () => `
 
         function setView(payload) {
              if (payload && payload.lat && payload.lng) {
+                 isProgrammaticMove = true;
                  map.flyTo([payload.lat, payload.lng], payload.zoom || 15, { animate: true, duration: 1.5 });
              }
         }
@@ -250,6 +259,8 @@ export default React.forwardRef<LeafletMapRef, LeafletMapProps>(function Leaflet
 }, ref) {
     const webViewRef = useRef<WebView>(null);
     const [isReady, setIsReady] = useState(false);
+    // Deep-compare guard: skip redundant SET_VIEW calls for the same coordinates
+    const prevRegionRef = useRef<{ lat: number; lng: number } | null>(null);
 
     // Prepare state payload for WebView
     const getPayload = useCallback(() => {
@@ -308,12 +319,22 @@ export default React.forwardRef<LeafletMapRef, LeafletMapProps>(function Leaflet
         [getGroupBounds]
     );
 
-    // Controlled Mode: Respond to initialRegion changes
+    // Controlled Mode: Respond to genuine initialRegion changes only
     useEffect(() => {
         if (isReady && initialRegion) {
+            const lat = initialRegion.latitude;
+            const lng = initialRegion.longitude;
+            const prev = prevRegionRef.current;
+
+            // Skip if coordinates haven't meaningfully changed (~1m precision)
+            if (prev && Math.abs(prev.lat - lat) < 0.00001 && Math.abs(prev.lng - lng) < 0.00001) {
+                return;
+            }
+
+            prevRegionRef.current = { lat, lng };
             webViewRef.current?.postMessage(JSON.stringify({
                 type: 'SET_VIEW',
-                payload: { lat: initialRegion.latitude, lng: initialRegion.longitude, zoom: 16 }
+                payload: { lat, lng, zoom: 16 }
             }));
         }
     }, [initialRegion, isReady]);
@@ -352,9 +373,11 @@ export default React.forwardRef<LeafletMapRef, LeafletMapProps>(function Leaflet
                 style={styles.webview}
                 onLoadEnd={() => setIsReady(true)}
                 onMessage={handleMessage}
-                scrollEnabled={false} // Disable page scroll, allow map pan
+                scrollEnabled={false}
                 overScrollMode="never"
                 bounces={false}
+                // iOS: prevent WebView content from bouncing during scroll gestures
+                {...(Platform.OS === 'ios' ? { decelerationRate: 'normal' } : {})}
             />
         </View>
     );

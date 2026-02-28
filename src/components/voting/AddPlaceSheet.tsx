@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
     ActivityIndicator,
     FlatList,
@@ -97,13 +97,24 @@ export default function AddPlaceSheet({
         return defaultRegion;
     }, [participants, userLocation]);
 
-    const [region, setRegion] = useState<Region>(initialRegion);
+    // commandedRegion: ONLY updated by programmatic actions (modal open, suggestion select).
+    // This drives the map's initialRegion prop. User drags NEVER update this.
+    const [commandedRegion, setCommandedRegion] = useState<Region>(initialRegion);
+
+    // mapCenterRef: silently tracks the current map center for autocomplete API bias.
+    // Using a ref avoids re-renders and prevents feeding state back into the map.
+    const mapCenterRef = useRef<{ latitude: number; longitude: number }>({
+        latitude: initialRegion.latitude,
+        longitude: initialRegion.longitude,
+    });
+
     const [selectedLocation, setSelectedLocation] = useState<{ lat: number; lng: number } | null>(null);
     const [selectedPlaceName, setSelectedPlaceName] = useState("");
 
     useEffect(() => {
         if (visible) {
-            setRegion(initialRegion);
+            setCommandedRegion(initialRegion);
+            mapCenterRef.current = { latitude: initialRegion.latitude, longitude: initialRegion.longitude };
             setSelectedLocation({ lat: initialRegion.latitude, lng: initialRegion.longitude });
             setSuggestions([]);
             setQuery("");
@@ -119,13 +130,15 @@ export default function AddPlaceSheet({
             }
 
             setLoading(true);
-            const results = await getAutocompleteSuggestions(query.trim(), region.latitude, region.longitude);
+            // Read center from ref — no dependency on dragged state, no feedback loop
+            const { latitude, longitude } = mapCenterRef.current;
+            const results = await getAutocompleteSuggestions(query.trim(), latitude, longitude);
             setSuggestions(dedupeSuggestionItems(results || []));
             setLoading(false);
         }, 450);
 
         return () => clearTimeout(timer);
-    }, [query, region.latitude, region.longitude]);
+    }, [query]);
 
     const handleSelectSuggestion = async (item: any) => {
         await Haptics.selectionAsync();
@@ -137,19 +150,23 @@ export default function AddPlaceSheet({
         const details = await getPlaceDetails(item.place_id);
         if (details?.geometry?.location) {
             const loc = details.geometry.location;
-            setRegion({
+            const newRegion: Region = {
                 latitude: loc.lat,
                 longitude: loc.lng,
                 latitudeDelta: 0.005,
                 longitudeDelta: 0.005,
-            });
+            };
+            setCommandedRegion(newRegion);
+            mapCenterRef.current = { latitude: loc.lat, longitude: loc.lng };
             setSelectedLocation(loc);
             setSelectedPlaceName(details.name || item.description || "");
         }
     };
 
     const handleRegionChangeComplete = (mapRegion: Region) => {
-        setRegion(mapRegion);
+        // Only update the ref (for API bias) and the selected location (for confirm).
+        // Do NOT update commandedRegion — that would feed back into the map and cause shaking.
+        mapCenterRef.current = { latitude: mapRegion.latitude, longitude: mapRegion.longitude };
         setSelectedLocation({ lat: mapRegion.latitude, lng: mapRegion.longitude });
     };
 
@@ -233,7 +250,7 @@ export default function AddPlaceSheet({
                                 <OlaMap
                                     participants={participants}
                                     currentUserLocation={selectedLocation || userLocation}
-                                    initialRegion={region}
+                                    initialRegion={commandedRegion}
                                     onRegionChangeComplete={handleRegionChangeComplete}
                                 />
                                 <View style={styles.crosshair} pointerEvents="none">
