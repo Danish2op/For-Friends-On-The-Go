@@ -1,6 +1,6 @@
 import * as Haptics from "expo-haptics";
 import { Compass, Locate } from "lucide-react-native";
-import React, { useRef } from "react";
+import React, { useImperativeHandle, useRef } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { COLORS } from "../../constants/theme";
@@ -29,9 +29,17 @@ interface OlaMapProps {
     externalNightMode?: boolean;
 }
 
-export default function OlaMap(props: OlaMapProps) {
+export type OlaMapRef = LeafletMapRef;
+
+const OlaMap = React.forwardRef<OlaMapRef, OlaMapProps>(function OlaMap(props, ref) {
     const mapRef = useRef<LeafletMapRef>(null);
     const toast = useToast();
+
+    // Expose the inner LeafletMap handle to the parent
+    useImperativeHandle(ref, () => ({
+        recenter: () => mapRef.current?.recenter(),
+        flyTo: (lat: number, lng: number) => mapRef.current?.flyTo(lat, lng),
+    }), []);
 
     const handleRecenter = async () => {
         await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -64,7 +72,9 @@ export default function OlaMap(props: OlaMapProps) {
             </View>
         </View>
     );
-}
+});
+
+export default OlaMap;
 
 const styles = StyleSheet.create({
     container: {

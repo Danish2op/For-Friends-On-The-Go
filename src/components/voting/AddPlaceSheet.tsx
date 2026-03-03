@@ -18,7 +18,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { COLORS, SKEUO } from "../../constants/theme";
 import { calculateCentroid, getAutocompleteSuggestions, getPlaceDetails } from "../../services/ola/logic";
-import OlaMap from "../map/OlaMap";
+import OlaMap, { type OlaMapRef } from "../map/OlaMap";
 
 interface AddPlaceSheetProps {
     visible: boolean;
@@ -69,6 +69,7 @@ export default function AddPlaceSheet({
     participants,
 }: AddPlaceSheetProps) {
     const insets = useSafeAreaInsets();
+    const mapRef = useRef<OlaMapRef>(null);
 
     const [query, setQuery] = useState("");
     const [suggestions, setSuggestions] = useState<any[]>([]);
@@ -147,9 +148,22 @@ export default function AddPlaceSheet({
         setQuery(item.description || item.name || "");
         setSuggestions([]);
 
-        const details = await getPlaceDetails(item.place_id);
-        if (details?.geometry?.location) {
-            const loc = details.geometry.location;
+        // Prefer coordinates embedded in autocomplete prediction (faster, no extra API call).
+        // Fall back to getPlaceDetails only when the prediction doesn't carry geometry.
+        let loc: { lat: number; lng: number } | null = null;
+        let placeName = item.description || item.name || "";
+
+        if (item.geometry?.location?.lat && item.geometry?.location?.lng) {
+            loc = item.geometry.location;
+        } else if (item.place_id) {
+            const details = await getPlaceDetails(item.place_id);
+            if (details?.geometry?.location) {
+                loc = details.geometry.location;
+                placeName = details.name || placeName;
+            }
+        }
+
+        if (loc) {
             const newRegion: Region = {
                 latitude: loc.lat,
                 longitude: loc.lng,
@@ -159,7 +173,11 @@ export default function AddPlaceSheet({
             setCommandedRegion(newRegion);
             mapCenterRef.current = { latitude: loc.lat, longitude: loc.lng };
             setSelectedLocation(loc);
-            setSelectedPlaceName(details.name || item.description || "");
+            setSelectedPlaceName(placeName);
+
+            // Imperative flyTo — bypasses the deep-compare guard in LeafletMap
+            // so the map ALWAYS moves to the selected place, even if nearby.
+            mapRef.current?.flyTo(loc.lat, loc.lng);
         }
     };
 
@@ -189,8 +207,9 @@ export default function AddPlaceSheet({
         <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
             <View style={styles.overlay}>
                 <KeyboardAvoidingView
-                    behavior={Platform.OS === "ios" ? "padding" : "height"}
+                    behavior="padding"
                     style={styles.keyboardContainer}
+                    keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
                 >
                     <View style={[styles.sheetOuter, { paddingBottom: Math.max(insets.bottom, 18) }]}>
                         <View style={styles.sheetInner}>
@@ -248,6 +267,7 @@ export default function AddPlaceSheet({
 
                             <View style={styles.mapWrapper}>
                                 <OlaMap
+                                    ref={mapRef}
                                     participants={participants}
                                     currentUserLocation={selectedLocation || userLocation}
                                     initialRegion={commandedRegion}
@@ -285,7 +305,8 @@ const styles = StyleSheet.create({
     },
     keyboardContainer: {
         width: "100%",
-        height: "86%",
+        maxHeight: "86%",
+        flex: 1,
     },
     sheetOuter: {
         flex: 1,
