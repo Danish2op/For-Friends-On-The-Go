@@ -50,6 +50,16 @@ export const getDistanceFromLatLonInKm = (lat1: number, lon1: number, lat2: numb
 
 const getOlaApiKey = () => getRequiredRuntimeEnv("EXPO_PUBLIC_OLA_MAPS_API_KEY");
 
+// ── Free-Tier Quota Guard ────────────────────────────────────────────────────
+// Detects HTTP 429 (rate limit) and 403 (quota exceeded) responses.
+// On free tier these are the most likely failure modes.
+const isQuotaOrRateLimit = (status: number) => status === 429 || status === 403;
+
+const logQuotaWarning = (endpoint: string, status: number) => {
+    const reason = status === 429 ? "Rate limit exceeded" : "Quota/auth limit reached";
+    console.warn(`⚠️ [${endpoint}] ${reason} (HTTP ${status}). Returning empty result — free-tier limit may be hit.`);
+};
+
 const buildPlaceIdentityKey = (place: any, index: number) => {
     const placeId = typeof place?.place_id === "string" ? place.place_id.trim().toLowerCase() : "";
     if (placeId) {
@@ -146,6 +156,11 @@ export const fetchMeetingPoints = async (
                 `&api_key=${apiKey}`;
 
             const response = await fetch(url);
+
+            if (isQuotaOrRateLimit(response.status)) {
+                logQuotaWarning("NearbySearch", response.status);
+                break; // Stop expansion entirely — quota is exhausted
+            }
 
             if (!response.ok) {
                 console.warn(`⚠️ API returned ${response.status} at radius=${radius}m — stopping expansion.`);
@@ -273,9 +288,13 @@ export const fetchPlaceDetails = async (placeId: string) => {
         const apiKey = getOlaApiKey();
         const url = `https://api.olamaps.io/places/v1/details?place_id=${placeId}&api_key=${apiKey}`;
         const response = await fetch(url);
-        const data = await response.json();
 
-        // Return the geometry location if it exists
+        if (isQuotaOrRateLimit(response.status)) {
+            logQuotaWarning("PlaceDetails", response.status);
+            return null;
+        }
+
+        const data = await response.json();
         return data?.result?.geometry?.location || null;
     } catch (error) {
         console.error("❌ Error fetching place details:", error);
@@ -288,10 +307,15 @@ export const searchPlaces = async (query: string, lat: number, lng: number) => {
 
     try {
         const apiKey = getOlaApiKey();
-        // Using Nearby Search with 'name' filter effectively acts as a local search
         const url = `https://api.olamaps.io/places/v1/nearbysearch?layers=venue&name=${encodeURIComponent(query)}&location=${lat},${lng}&radius=10000&api_key=${apiKey}`;
         console.log("🔍 Searching places:", query);
         const res = await fetch(url);
+
+        if (isQuotaOrRateLimit(res.status)) {
+            logQuotaWarning("SearchPlaces", res.status);
+            return [];
+        }
+
         const data = await res.json();
         return data.predictions || [];
     } catch (error) {
@@ -308,6 +332,11 @@ export const getAutocompleteSuggestions = async (input: string, lat: number, lng
         // Removed types restriction as it causes API 500 errors (Autocomplete likely doesn't support multiple category types)
         const url = `https://api.olamaps.io/places/v1/autocomplete?input=${encodeURIComponent(input)}&location=${lat},${lng}&radius=10000&api_key=${apiKey}`;
         const res = await fetch(url);
+
+        if (isQuotaOrRateLimit(res.status)) {
+            logQuotaWarning("Autocomplete", res.status);
+            return [];
+        }
 
         if (!res.ok) {
             const text = await res.text();
@@ -329,6 +358,12 @@ export const getPlaceDetails = async (placeId: string) => {
         const apiKey = getOlaApiKey();
         const url = `https://api.olamaps.io/places/v1/details?place_id=${placeId}&api_key=${apiKey}`;
         const res = await fetch(url);
+
+        if (isQuotaOrRateLimit(res.status)) {
+            logQuotaWarning("GetPlaceDetails", res.status);
+            return null;
+        }
+
         const data = await res.json();
         return data.result; // Contains geometry.location
     } catch (error) {
