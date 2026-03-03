@@ -1,4 +1,10 @@
 import type { ConfigContext, ExpoConfig } from "@expo/config";
+import { config as dotenvConfig } from "dotenv";
+import path from "path";
+
+// Load .env.local so getRequiredEnv() can find keys during EAS local builds.
+// `override: false` ensures vars already in process.env (e.g. EAS dashboard) take priority.
+dotenvConfig({ path: path.resolve(__dirname, ".env.local"), override: false });
 
 const EAS_PROJECT_ID = "450150cf-ce6f-4b59-8aff-90ce8ed80884";
 
