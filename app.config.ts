@@ -1,10 +1,4 @@
 import type { ConfigContext, ExpoConfig } from "@expo/config";
-import { config as dotenvConfig } from "dotenv";
-import path from "path";
-
-// Load .env.local so getRequiredEnv() can find keys during EAS local builds.
-// `override: false` ensures vars already in process.env (e.g. EAS dashboard) take priority.
-dotenvConfig({ path: path.resolve(__dirname, ".env.local"), override: false });
 
 const EAS_PROJECT_ID = "450150cf-ce6f-4b59-8aff-90ce8ed80884";
 
@@ -13,33 +7,28 @@ const isPlaceholder = (value: string) => {
     return lower.includes("replace") || lower.includes("placeholder") || lower.includes("your_");
 };
 
-const getRequiredEnv = (
-    name: string,
-    validationPattern?: RegExp,
-    aliases: string[] = []
-) => {
-    const candidates = [name, ...aliases];
-    const resolved = candidates
-        .map((key) => ({ key, value: (process.env[key] ?? "").trim() }))
-        .find((entry) => entry.value && !isPlaceholder(entry.value));
-
-    if (!resolved) {
-        const aliasHint = aliases.length > 0 ? ` (or ${aliases.join(", ")})` : "";
-        throw new Error(
-            `[app.config] Missing ${name}. Set ${name}${aliasHint} in .env.local for local development and in EAS environment variables for build profiles.`
-        );
+/**
+ * Non-throwing env reader for build-time config injection.
+ * Returns the value if present and valid, otherwise returns fallback.
+ * Runtime validation still occurs in src/config/env.ts at app startup.
+ */
+const getEnv = (name: string, fallback = ""): string => {
+    const value = (process.env[name] ?? "").trim();
+    if (!value || isPlaceholder(value)) {
+        if (process.env.EAS_BUILD === "true" || process.env.CI === "true") {
+            console.warn(
+                `[app.config] ⚠️ ${name} is missing or placeholder. ` +
+                `Ensure it is set in EAS secrets or shell env before building.`
+            );
+        }
+        return fallback;
     }
-
-    if (validationPattern && !validationPattern.test(resolved.value)) {
-        throw new Error(`[app.config] Invalid ${resolved.key}. Value does not match expected format.`);
-    }
-
-    return resolved.value;
+    return value;
 };
 
 export default ({ config }: ConfigContext): ExpoConfig => {
-    getRequiredEnv("EXPO_PUBLIC_OLA_MAPS_API_KEY");
-    const googleMapsApiKey = getRequiredEnv("EXPO_PUBLIC_GOOGLE_MAPS_API_KEY");
+    getEnv("EXPO_PUBLIC_OLA_MAPS_API_KEY");
+    const googleMapsApiKey = getEnv("EXPO_PUBLIC_GOOGLE_MAPS_API_KEY");
 
     return {
         ...config,
