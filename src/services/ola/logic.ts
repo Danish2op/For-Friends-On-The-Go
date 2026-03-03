@@ -113,15 +113,9 @@ const QUOTA_CAFES = 5;
 const QUOTA_RESTAURANTS = 3;
 const INITIAL_RADIUS_M = 1500;
 const RADIUS_MULTIPLIER = 1.5;
-const MAX_RADIUS_M = 30_000;
-const MAX_ITERATIONS = 4;
+const MAX_RADIUS_M = 50_000;
+const MAX_ITERATIONS = 8;
 
-/**
- * Fetches meeting points around a coordinate, dynamically expanding the
- * search radius until category quotas are satisfied or safety caps are hit.
- *
- * Guarantees a minimum of 5 cafes and 3 restaurants when the area supports it.
- */
 export const fetchMeetingPoints = async (
     lat: number,
     lng: number

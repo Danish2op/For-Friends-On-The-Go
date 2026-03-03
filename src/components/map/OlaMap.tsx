@@ -1,7 +1,8 @@
 import * as Haptics from "expo-haptics";
 import { Compass, Locate } from "lucide-react-native";
 import React, { useImperativeHandle, useRef } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
+import { View } from "@/src/components/ui/tamagui-primitives";
 
 import { COLORS } from "../../constants/theme";
 import { useToast } from "../../context/ToastContext";

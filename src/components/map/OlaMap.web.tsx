@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { Text, View } from '@/src/components/ui/tamagui-primitives';
 
 interface Location {
     lat: number;

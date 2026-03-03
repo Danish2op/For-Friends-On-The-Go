@@ -10,11 +10,10 @@ import {
     FlatList,
     Share,
     StyleSheet,
-    Text,
     TouchableOpacity,
-    View,
 } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
+import { Text, View } from "@/src/components/ui/tamagui-primitives";
 import { ErrorBoundary } from "../../components/ErrorBoundary";
 import { UserAvatar } from "../../components/avatar/avatar-ui";
 import ExitConfirmationCard from "../../components/lobby/ExitConfirmationCard";

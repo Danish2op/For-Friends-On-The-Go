@@ -3,6 +3,8 @@ import { Stack, useRootNavigationState, useRouter, useSegments } from "expo-rout
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import { ActivityIndicator, View } from "react-native";
+import { TamaguiProvider, Theme } from "tamagui";
+import tamaguiConfig from "../../tamagui.config";
 import { COLORS } from "../../constants/theme";
 import { AuthProvider, useAppAuth } from "../context/AuthContext";
 import { ToastProvider } from "../context/ToastContext";
@@ -125,12 +127,16 @@ function AuthGate() {
 
 export default function Layout() {
   return (
-    <AuthProvider>
-      <ToastProvider>
-        <StatusBar style="dark" />
-        <NotificationInviteBridge />
-        <AuthGate />
-      </ToastProvider>
-    </AuthProvider>
+    <TamaguiProvider config={tamaguiConfig} defaultTheme="light">
+      <Theme name="light">
+        <AuthProvider>
+          <ToastProvider>
+            <StatusBar style="dark" />
+            <NotificationInviteBridge />
+            <AuthGate />
+          </ToastProvider>
+        </AuthProvider>
+      </Theme>
+    </TamaguiProvider>
   );
 }

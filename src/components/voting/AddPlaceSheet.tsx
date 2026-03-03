@@ -9,12 +9,11 @@ import {
     Modal,
     Platform,
     StyleSheet,
-    Text,
     TextInput,
     TouchableOpacity,
-    View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Text, View } from "@/src/components/ui/tamagui-primitives";
 
 import { COLORS, SKEUO } from "../../constants/theme";
 import { calculateCentroid, getAutocompleteSuggestions, getPlaceDetails } from "../../services/ola/logic";

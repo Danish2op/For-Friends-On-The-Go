@@ -7,7 +7,8 @@
 
 import { RefreshCw } from "lucide-react-native";
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View, type StyleProp, type ViewStyle } from "react-native";
+import { StyleSheet, TouchableOpacity, type StyleProp, type ViewStyle } from "react-native";
+import { Text, View } from "@/src/components/ui/tamagui-primitives";
 import {
     genRandomAvatarConfig,
     type NiceAvatarConfig,

@@ -10,11 +10,9 @@ import { Stack, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
     ActivityIndicator,
-    ScrollView,
     StyleSheet,
-    Text,
-    View,
 } from "react-native";
+import { ScrollView, Text, View } from "@/src/components/ui/tamagui-primitives";
 
 const STATUS_META: Record<string, { icon: string; color: string; label: string }> = {
     WAITING: { icon: "hourglass-outline", color: COLORS.accent, label: "Waiting" },

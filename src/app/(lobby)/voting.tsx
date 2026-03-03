@@ -10,11 +10,10 @@ import {
     FlatList,
     StatusBar,
     StyleSheet,
-    Text,
     TouchableOpacity,
-    View,
 } from "react-native";
 import Animated, { FadeInDown, Layout, ZoomIn } from "react-native-reanimated";
+import { Text, View } from "@/src/components/ui/tamagui-primitives";
 import ExitConfirmationCard from "../../components/lobby/ExitConfirmationCard";
 import AddPlaceSheet from "../../components/voting/AddPlaceSheet";
 import { COLORS, SKEUO } from "../../constants/theme";

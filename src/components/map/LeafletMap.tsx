@@ -1,7 +1,8 @@
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import { WebView } from 'react-native-webview';
+import { View } from '@/src/components/ui/tamagui-primitives';
 
 interface Location {
     lat: number;

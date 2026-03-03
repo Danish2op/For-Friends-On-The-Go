@@ -1,8 +1,9 @@
 import * as Haptics from "expo-haptics";
 import { AlertCircle, CheckCircle, Info, LucideIcon } from "lucide-react-native";
 import React, { forwardRef, useCallback, useImperativeHandle, useState } from "react";
-import { Platform, StyleSheet, Text, View } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import Animated, { SlideInUp, SlideOutUp } from "react-native-reanimated";
+import { Text, View } from "@/src/components/ui/tamagui-primitives";
 import { COLORS, SKEUO } from "../../constants/theme";
 
 export type ToastType = "success" | "error" | "info";

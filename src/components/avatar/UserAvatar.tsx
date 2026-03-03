@@ -1,6 +1,7 @@
 import React, { memo } from "react";
-import { View, type StyleProp, type ViewStyle } from "react-native";
+import { type StyleProp, type ViewStyle } from "react-native";
 import Svg, { Circle, Ellipse, G, Path, Rect } from "react-native-svg";
+import { View } from "@/src/components/ui/tamagui-primitives";
 import {
     DEFAULT_AVATAR_CONFIG,
     isValidAvatarConfig,

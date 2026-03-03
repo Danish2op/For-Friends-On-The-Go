@@ -3,11 +3,10 @@ import React from "react";
 import {
     Modal,
     StyleSheet,
-    Text,
     TouchableOpacity,
     TouchableWithoutFeedback,
-    View,
 } from "react-native";
+import { Text, View } from "@/src/components/ui/tamagui-primitives";
 import { COLORS, SKEUO } from "../../constants/theme";
 
 interface ExitConfirmationCardProps {

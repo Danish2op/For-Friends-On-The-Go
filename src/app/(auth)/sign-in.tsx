@@ -9,11 +9,10 @@ import {
     KeyboardAvoidingView,
     Platform,
     StyleSheet,
-    Text,
     TextInput,
     TouchableOpacity,
-    View,
 } from "react-native";
+import { Text, View } from "@/src/components/ui/tamagui-primitives";
 import { COLORS, SHADOWS, SKEUO, TYPE } from "../../../constants/theme";
 import { useToast } from "@/src/context/ToastContext";
 import { auth } from "@/src/services/firebase/config";

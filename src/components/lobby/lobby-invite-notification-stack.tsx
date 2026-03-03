@@ -1,6 +1,7 @@
 import React from "react";
-import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, StyleSheet, TouchableOpacity } from "react-native";
 import { BellRing, Check, X } from "lucide-react-native";
+import { ScrollView, Text, View } from "@/src/components/ui/tamagui-primitives";
 import { COLORS, SKEUO } from "../../constants/theme";
 import type { LobbyInvite } from "../../services/firebase/lobby-lifecycle";
 

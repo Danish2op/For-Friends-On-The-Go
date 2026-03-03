@@ -12,10 +12,9 @@ import {
     ActivityIndicator,
     FlatList,
     StyleSheet,
-    Text,
     TouchableOpacity,
-    View,
 } from "react-native";
+import { Text, View } from "@/src/components/ui/tamagui-primitives";
 
 const STATUS_COLORS: Record<string, string> = {
     WAITING: COLORS.accent,

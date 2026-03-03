@@ -5,12 +5,10 @@ import {
     Dimensions,
     Modal,
     Pressable,
-    ScrollView,
     StyleSheet,
-    Text,
     TouchableOpacity,
-    View,
 } from "react-native";
+import { ScrollView, Text, View } from "@/src/components/ui/tamagui-primitives";
 import { AvatarRandomizer, UserAvatar } from "../../components/avatar/avatar-ui";
 import FriendRequestCenter from "../../components/friends/friend-request-center";
 import { type NiceAvatarConfig } from "../../constants/avatars";

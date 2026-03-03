@@ -7,11 +7,10 @@ import {
     ActivityIndicator,
     StatusBar,
     StyleSheet,
-    Text,
     TouchableOpacity,
-    View,
 } from "react-native";
 import Animated, { FadeInDown, FadeInUp, ZoomIn } from "react-native-reanimated";
+import { Text, View } from "@/src/components/ui/tamagui-primitives";
 import ExitConfirmationCard from "../../components/lobby/ExitConfirmationCard";
 import { COLORS, SKEUO } from "../../constants/theme";
 import { useAppAuth } from "../../context/AuthContext";

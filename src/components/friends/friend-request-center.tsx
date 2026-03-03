@@ -1,5 +1,6 @@
 import React from "react";
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import { Text, View } from "@/src/components/ui/tamagui-primitives";
 import { UserAvatar } from "../../components/avatar/avatar-ui";
 import { COLORS, SKEUO } from "../../constants/theme";
 import type { FriendProfile, IncomingFriendRequest, OutgoingFriendRequest } from "../../services/firebase/friends";

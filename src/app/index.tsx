@@ -38,14 +38,12 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
     KeyboardAvoidingView,
     Platform,
-    ScrollView,
     StyleSheet,
-    Text,
     TextInput,
     TouchableOpacity,
-    View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { ScrollView, Text, View } from "@/src/components/ui/tamagui-primitives";
 
 type ActionState = "create" | "join" | null;
 
