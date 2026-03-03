@@ -1,0 +1,60 @@
+# EAS Build Archive Ignore File
+# This overrides .gitignore for EAS build archives.
+# Copied from .gitignore with negations for build-critical files.
+
+# dependencies
+node_modules/
+functions/lib/
+
+# Expo
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+
+# Native
+.kotlin/
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Metro
+.metro-health-check*
+.tamagui/
+
+# debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# macOS
+.DS_Store
+*.pem
+
+# local env files — EXCLUDE most env files but INCLUDE .env.local for builds
+.env
+# !.env.local — explicitly included below
+
+# local guide
+EAS_BUILD_GUIDE.md
+
+# Firebase native config — INCLUDE for builds (negation below)
+# google-services.json — needed for Android Firebase
+# GoogleService-Info.plist — needed for iOS Firebase
+
+# typescript
+*.tsbuildinfo
+
+app-example
+
+# generated native folders
+/ios
+/android
+
+# ─── BUILD-CRITICAL: Force-include files excluded by .gitignore ───
+!google-services.json
+!GoogleService-Info.plist
+!.env.local
