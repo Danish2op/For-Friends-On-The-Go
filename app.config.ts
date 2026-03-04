@@ -1,5 +1,16 @@
 import type { ConfigContext, ExpoConfig } from "@expo/config";
 
+// Load .env.local into process.env BEFORE Metro bundles the JS.
+// This is critical: EXPO_PUBLIC_* vars are inlined at bundle time.
+// .easignore ensures .env.local is in the EAS build archive.
+try {
+    const { config: loadDotenv } = require("dotenv");
+    const path = require("path");
+    loadDotenv({ path: path.resolve(__dirname, ".env.local"), override: false });
+} catch {
+    // dotenv not available — env vars must already be in process.env
+}
+
 const EAS_PROJECT_ID = "450150cf-ce6f-4b59-8aff-90ce8ed80884";
 
 const isPlaceholder = (value: string) => {
