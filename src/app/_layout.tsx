@@ -4,8 +4,8 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import { ActivityIndicator, View } from "react-native";
 import { TamaguiProvider, Theme } from "tamagui";
-import tamaguiConfig from "../../tamagui.config";
 import { COLORS } from "../../constants/theme";
+import tamaguiConfig from "../../tamagui.config";
 import { AuthProvider, useAppAuth } from "../context/AuthContext";
 import { ToastProvider } from "../context/ToastContext";
 
@@ -58,7 +58,7 @@ function NotificationInviteBridge() {
 }
 
 function AuthGate() {
-  const { loading: authLoading, signedIn, profileState } = useAppAuth();
+  const { loading: authLoading, signedIn, profileState, signUpInProgress } = useAppAuth();
   const segments = useSegments();
   const rootNavigationState = useRootNavigationState();
   const router = useRouter();
@@ -84,10 +84,11 @@ function AuthGate() {
       return;
     }
 
-    if (signedIn && inAuthGroup && !requiresProfileSetup) {
+    // Don't auto-redirect while sign-up registration is still in-flight
+    if (signedIn && inAuthGroup && !requiresProfileSetup && !signUpInProgress) {
       router.replace("/");
     }
-  }, [authLoading, navigationMounted, profileState, router, segments, signedIn]);
+  }, [authLoading, navigationMounted, profileState, router, segments, signedIn, signUpInProgress]);
 
   if (authLoading || !navigationMounted) {
     return (

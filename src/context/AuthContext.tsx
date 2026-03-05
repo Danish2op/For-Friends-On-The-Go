@@ -20,9 +20,11 @@ interface AuthContextValue {
     loading: boolean;
     signedIn: boolean;
     profileComplete: boolean;
+    signUpInProgress: boolean;
     signInWithName: (name: string) => Promise<string>;
     updateDisplayName: (name: string) => Promise<void>;
     updateAvatarOptimistic: (config: NiceAvatarConfig) => void;
+    setSignUpInProgress: (v: boolean) => void;
     refreshProfile: () => Promise<UserProfile | null>;
     signOut: () => Promise<void>;
 }
@@ -88,6 +90,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         auth.currentUser?.uid ? "loading" : "idle"
     );
     const [profileError, setProfileError] = useState<string | null>(null);
+    const [signUpInProgress, setSignUpInProgress] = useState(false);
 
     useEffect(() => {
         let active = true;
@@ -259,6 +262,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
             loading: !authReady || profileLoading,
             signedIn: Boolean(userId),
             profileComplete: profileState === "ready",
+            signUpInProgress,
             signInWithName: async () => {
                 if (!userId) {
                     throw new Error("A Firebase session is required.");
@@ -269,10 +273,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
                 throw new Error("Display name updates are managed through the profile service.");
             },
             updateAvatarOptimistic,
+            setSignUpInProgress,
             refreshProfile,
             signOut,
         }),
-        [authReady, profile, profileError, profileLoading, profileState, refreshProfile, signOut, updateAvatarOptimistic, userId]
+        [authReady, profile, profileError, profileLoading, profileState, refreshProfile, signOut, signUpInProgress, updateAvatarOptimistic, userId]
     );
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

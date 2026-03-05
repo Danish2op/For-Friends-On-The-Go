@@ -1,4 +1,5 @@
 import { AvatarRandomizer } from "@/src/components/avatar/avatar-ui";
+import { Text, View } from "@/src/components/ui/tamagui-primitives";
 import { genRandomAvatarConfig, type NiceAvatarConfig } from "@/src/constants/avatars";
 import { useAppAuth } from "@/src/context/AuthContext";
 import { useToast } from "@/src/context/ToastContext";
@@ -27,11 +28,11 @@ import {
     ActivityIndicator,
     KeyboardAvoidingView,
     Platform,
+    ScrollView,
     StyleSheet,
     TextInput,
     TouchableOpacity,
 } from "react-native";
-import { Text, View } from "@/src/components/ui/tamagui-primitives";
 import { COLORS, SHADOWS, SKEUO, TYPE } from "../../../constants/theme";
 
 type SetupPhase = "credentials" | "profile";
@@ -92,7 +93,7 @@ const parseSignUpError = (error: unknown) => {
 export default function SignUpScreen() {
     const { mode } = useLocalSearchParams<{ mode?: string }>();
     const toast = useToast();
-    const { refreshProfile } = useAppAuth();
+    const { refreshProfile, setSignUpInProgress } = useAppAuth();
 
     const [phase, setPhase] = useState<SetupPhase>("credentials");
     const [email, setEmail] = useState("");
@@ -280,6 +281,7 @@ export default function SignUpScreen() {
         }
 
         setSubmitting(true);
+        setSignUpInProgress(true);
         let createdUid: string | null = null;
         try {
             const credential = await createUserWithEmailAndPassword(auth, normalizedEmail, password.trim());
@@ -294,6 +296,7 @@ export default function SignUpScreen() {
             toast.show(parseSignUpError(error), "error");
         } finally {
             setSubmitting(false);
+            setSignUpInProgress(false);
         }
     };
 
@@ -350,7 +353,7 @@ export default function SignUpScreen() {
     return (
         <KeyboardAvoidingView
             style={styles.root}
-            behavior={Platform.OS === "ios" ? "padding" : undefined}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
             <LinearGradient
                 colors={[COLORS.backgroundAlt, COLORS.background]}
@@ -362,7 +365,12 @@ export default function SignUpScreen() {
             <View style={styles.glowTop} />
             <View style={styles.glowBottom} />
 
-            <View style={styles.container}>
+            <ScrollView
+                contentContainerStyle={styles.scrollContent}
+                keyboardShouldPersistTaps="handled"
+                bounces={false}
+                showsVerticalScrollIndicator={false}
+            >
                 <Text style={styles.eyebrow}>FOR FRIENDS ON THE GO</Text>
                 <Text style={styles.title}>Create Account</Text>
                 <Text style={styles.subtitle}>
@@ -544,7 +552,7 @@ export default function SignUpScreen() {
                             : "Already have an account? Sign in"}
                     </Text>
                 </TouchableOpacity>
-            </View>
+            </ScrollView>
         </KeyboardAvoidingView>
     );
 }
@@ -572,8 +580,8 @@ const styles = StyleSheet.create({
         left: -40,
         backgroundColor: "rgba(255, 255, 255, 0.52)",
     },
-    container: {
-        flex: 1,
+    scrollContent: {
+        flexGrow: 1,
         paddingHorizontal: 24,
         paddingTop: 82,
         paddingBottom: 40,

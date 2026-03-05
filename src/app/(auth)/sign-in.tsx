@@ -1,22 +1,23 @@
-import { FirebaseError } from "firebase/app";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { Text, View } from "@/src/components/ui/tamagui-primitives";
+import { useToast } from "@/src/context/ToastContext";
+import { auth } from "@/src/services/firebase/config";
+import { IdentifierResolutionError, resolveEmailForAuthIdentifier } from "@/src/services/firebase/users";
 import * as Haptics from "expo-haptics";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link, router } from "expo-router";
-import { LogIn, Lock, UserRound } from "lucide-react-native";
+import { FirebaseError } from "firebase/app";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { Lock, LogIn, UserRound } from "lucide-react-native";
 import React, { useState } from "react";
 import {
     KeyboardAvoidingView,
     Platform,
+    ScrollView,
     StyleSheet,
     TextInput,
     TouchableOpacity,
 } from "react-native";
-import { Text, View } from "@/src/components/ui/tamagui-primitives";
 import { COLORS, SHADOWS, SKEUO, TYPE } from "../../../constants/theme";
-import { useToast } from "@/src/context/ToastContext";
-import { auth } from "@/src/services/firebase/config";
-import { IdentifierResolutionError, resolveEmailForAuthIdentifier } from "@/src/services/firebase/users";
 
 const parseSignInError = (error: unknown, identifier: string) => {
     if (error instanceof IdentifierResolutionError) {
@@ -85,7 +86,7 @@ export default function SignInScreen() {
     return (
         <KeyboardAvoidingView
             style={styles.root}
-            behavior={Platform.OS === "ios" ? "padding" : undefined}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
             <LinearGradient
                 colors={[COLORS.backgroundAlt, COLORS.background]}
@@ -97,7 +98,12 @@ export default function SignInScreen() {
             <View style={styles.glowTop} />
             <View style={styles.glowBottom} />
 
-            <View style={styles.container}>
+            <ScrollView
+                contentContainerStyle={styles.scrollContent}
+                keyboardShouldPersistTaps="handled"
+                bounces={false}
+                showsVerticalScrollIndicator={false}
+            >
                 <Text style={styles.eyebrow}>FOR FRIENDS ON THE GO</Text>
                 <Text style={styles.title}>Welcome Back</Text>
                 <Text style={styles.subtitle}>Sign in with email or username and your password.</Text>
@@ -156,7 +162,7 @@ export default function SignInScreen() {
                         <Text style={styles.linkLabel}>New here? Create your account</Text>
                     </TouchableOpacity>
                 </Link>
-            </View>
+            </ScrollView>
         </KeyboardAvoidingView>
     );
 }
@@ -184,8 +190,8 @@ const styles = StyleSheet.create({
         left: -50,
         backgroundColor: "rgba(255, 255, 255, 0.55)",
     },
-    container: {
-        flex: 1,
+    scrollContent: {
+        flexGrow: 1,
         paddingHorizontal: 24,
         paddingTop: 92,
         paddingBottom: 40,
