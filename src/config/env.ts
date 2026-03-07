@@ -1,7 +1,5 @@
-const readEnv = (key: string) => (process.env[key] ?? "").trim();
-
 const makeMissingEnvMessage = (key: string) =>
-    `Missing required environment variable ${key}. Configure it in .env.local for local dev and EAS env for builds.`;
+    `Missing required environment variable ${key}. Configure it in .env.local for local dev and as EAS secrets for builds.`;
 
 const isPlaceholder = (value: string) => {
     const lower = value.toLowerCase();
@@ -15,9 +13,10 @@ const ensurePresent = (key: string, value: string) => {
     return value;
 };
 
+// Static reads — Metro will inline these at bundle time.
 export const ENV = {
-    olaMapsApiKey: readEnv("EXPO_PUBLIC_OLA_MAPS_API_KEY"),
-    googleMapsApiKey: readEnv("EXPO_PUBLIC_GOOGLE_MAPS_API_KEY"),
+    olaMapsApiKey: (process.env.EXPO_PUBLIC_OLA_MAPS_API_KEY ?? "").trim(),
+    googleMapsApiKey: (process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY ?? "").trim(),
 } as const;
 
 export const getRequiredRuntimeEnv = (
