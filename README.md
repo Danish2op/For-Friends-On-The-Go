@@ -15,7 +15,7 @@
 
 ## 💡 The Concept
 
-Ever struggled to coordinate a meetup with friends? "Where are you?" "I'm 5 minutes away!" (Narrator: *They were not 5 minutes away.*)
+Ever struggled to coordinate a meetup with friends? "Where are you?" "I'm 5 minutes away!" (Fact: *They were not 5 minutes away.*)
 
 **For Friends On The Go** solves the eternal chaos of group meetups. It’s a dynamic, real-time social utility that lets you create temporary "Lobbies" for events, track your squad's live locations on a map, sync up on destinations, and vote on the fly. 
 
