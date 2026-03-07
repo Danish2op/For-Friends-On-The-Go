@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./assets/images/Gemini_Generated_Image_bqiykfbqiykfbqiy-removebg-preview.png" alt="App Icon" width="120" />
+  <img src="assets/images/Gemini_Generated_Image_bqiykfbqiykfbqiy-removebg-preview.png" alt="App Icon" width="120" />
   
   # For Friends On The Go 🚗💨
   
