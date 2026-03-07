@@ -47,7 +47,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
         slug: "ForFriendsOnTheGo-App",
         version: "1.0.0",
         orientation: "portrait",
-        icon: "./assets/images/Gemini_Generated_Image_4kxl224kxl224kxl.png",
+        icon: "./assets/images/Gemini_Generated_Image_bqiykfbqiykfbqiy-removebg-preview.png",
         scheme: "forfriendsonthego",
         userInterfaceStyle: "automatic",
         newArchEnabled: true,
@@ -58,7 +58,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
         android: {
             adaptiveIcon: {
                 backgroundColor: "#000000",
-                foregroundImage: "./assets/images/Gemini_Generated_Image_4kxl224kxl224kxl.png",
+                foregroundImage: "./assets/images/Gemini_Generated_Image_bqiykfbqiykfbqiy-removebg-preview.png",
             },
             package: "com.danishsharma.ForFriendsOnTheGo",
             edgeToEdgeEnabled: true,
@@ -78,7 +78,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
         },
         web: {
             output: "static",
-            favicon: "./assets/images/favicon.png",
+            favicon: "./assets/images/Gemini_Generated_Image_bqiykfbqiykfbqiy-removebg-preview.png",
         },
         plugins: [
             "expo-router",
@@ -93,7 +93,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
             [
                 "expo-splash-screen",
                 {
-                    image: "./assets/images/splash-icon.png",
+                    image: "./assets/images/Gemini_Generated_Image_bqiykfbqiykfbqiy-removebg-preview.png",
                     imageWidth: 200,
                     resizeMode: "contain",
                     backgroundColor: "#ffffff",
