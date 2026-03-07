@@ -1,77 +1,107 @@
-# Welcome to your Expo app 👋
+<div align="center">
+  <img src="./assets/images/Gemini_Generated_Image_4kxl224kxl224kxl.png" alt="App Icon" width="120" />
+  
+  # For Friends On The Go 🚗💨
+  
+  **The ultimate real-time location sharing and social planning app for tight-knit squads.**
+  
+  [![React Native](https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactnative.dev/)
+  [![Expo](https://img.shields.io/badge/Expo-1B1F23?style=for-the-badge&logo=expo&logoColor=white)](https://expo.dev/)
+  [![Firebase](https://img.shields.io/badge/firebase-ffca28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com/)
+  [![Tamagui](https://img.shields.io/badge/Tamagui-151515?style=for-the-badge&logo=react&logoColor=white)](https://tamagui.dev/)
+</div>
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+---
 
-## Get started
+## 💡 The Concept
 
-1. Install dependencies
+Ever struggled to coordinate a meetup with friends? "Where are you?" "I'm 5 minutes away!" (Narrator: *They were not 5 minutes away.*)
 
+**For Friends On The Go** solves the eternal chaos of group meetups. It’s a dynamic, real-time social utility that lets you create temporary "Lobbies" for events, track your squad's live locations on a map, sync up on destinations, and vote on the fly. 
+
+**This isn't just a map app; it's a real-time social multiplayer experience.**
+
+---
+
+## ✨ Features (Showcasing Creativity)
+
+- 🎮 **Live Lobbies**: Just like a multiplayer video game. Create a lobby, invite your friends, and see everyone drop onto the live map. Leave the lobby, and your location goes private again instantly.
+- 🗺️ **Real-Time Multiplayer Map**: Powered by responsive location subscription hooks and map clustering, watching your friends converge on a single point feels magical.
+- 🗳️ **Democratic Destination Voting**: Can't decide where to eat? Anyone in the lobby can suggest a place using the **Add Place Sheet**, and the squad votes. Highest votes win.
+- 👤 **Dynamic Avatars & Profiles**: Express yourself with randomized avatars (powered by a robust state management system) and keep your inner circle close with a native friend system.
+- 🛡️ **Exit Guards**: Accidentally swiped away? Smart lobby exit guards prevent dropping out of active hangouts unintentionally. 
+
+---
+
+## 🛠️ Technical Capabilities (Under the Hood)
+
+This app is engineered to handle highly concurrent read/writes while maintaining a silky-smooth **60 FPS UI**.
+
+### Architecture & Stack
+- **Framework**: Built on **React Native (Expo Router)** leveraging the new architecture for highly performant mobile rendering across iOS and Android.
+- **Styling Engine**: Powered by **Tamagui**, utilizing an optimizing compiler that extracts styles to atomic CSS, resulting in near-zero runtime overhead for animations and layouts.
+- **Database & Sync**: Heavily relies on **Firebase Firestore** with complex, battle-tested Security Rules. Includes transactional implementations for atomic operations (e.g., two-way friend deletions to prevent data desynchronization).
+- **Mapping & Routing**: Deep integration with **Ola Maps API** and **Google Maps** (configured dynamically for remote builds based on EAS env secrets), enabling custom map styling and point-to-point routing logic.
+- **State & Animation**: Uses `react-native-reanimated` and `react-native-gesture-handler` for fluid, physics-based micro-interactions (like bottom sheets and avatar carousels).
+
+### Hard Problems Solved
+1. **Real-time Map State Desync**: Overcame race conditions with Firebase listeners and React state by implementing smart debounce and highly localized state updates for avatar coordinates.
+2. **Keyboard Avoidance & Auth Flows**: Implemented bulletproof form mechanics during account creation, preventing deadlocks and ghost-state UI glitches.
+3. **CI/CD with EAS**: Configured complex environment parity mapping (Metro static inlining) ensuring local `.env.local` functionality maps perfectly to Expo Application Services (EAS) cloud build secrets.
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js (v18+)
+- Yarn or npm
+- Expo CLI
+- A Firebase project with Firestore and Authentication enabled
+- Ola Maps / Google Maps API Keys
+
+### Installation
+
+1. **Clone the repo**
    ```bash
-   npm install
+   git clone https://github.com/Danish2op/For-Friends-On-The-Go.git
+   cd For-Friends-On-The-Go
    ```
 
-2. Configure environment variables (required)
-
+2. **Install dependencies**
    ```bash
-   cp .env.example .env.local
+   yarn install
    ```
 
-   Fill all required keys in `.env.local`:
-   - `EXPO_PUBLIC_OLA_MAPS_API_KEY`
-   - `EXPO_PUBLIC_GOOGLE_MAPS_API_KEY`
-
-3. Start the app
-
-   ```bash
-   npx expo start -c
+3. **Set up Environment Variables**
+   Create a `.env.local` file in the root directory:
+   ```env
+   EXPO_PUBLIC_OLA_MAPS_API_KEY=your_ola_maps_key
+   EXPO_PUBLIC_GOOGLE_MAPS_API_KEY=your_google_maps_key
    ```
 
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Production build checklist
-
-1. Ensure build-time env vars are set for EAS:
-   - `EXPO_PUBLIC_OLA_MAPS_API_KEY`
-   - `EXPO_PUBLIC_GOOGLE_MAPS_API_KEY`
-2. Deploy Firebase Firestore rules:
-
+4. **Run the App**
    ```bash
-   firebase deploy --only firestore:rules
+   yarn start
+   # Press 'i' for iOS emulator, 'a' for Android emulator
    ```
 
-3. Build APK:
+---
 
-   ```bash
-   eas build --platform android --profile production
-   ```
+## 📦 Build & Deploy
 
-## Get a fresh project
-
-When you're ready, run:
+This project uses EAS (Expo Application Services) for automated cloud deployments.
 
 ```bash
-npm run reset-project
+# To trigger a cloud build for Android
+eas build --platform android --profile preview
+
+# To update the live app instantly over-the-air (OTA)
+eas update --branch preview --message "Updating map UI"
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+---
 
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+<div align="center">
+  <i>Built thoughtfully by Danish Sharma</i>
+</div>
